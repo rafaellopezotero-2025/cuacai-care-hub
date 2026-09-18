@@ -25,7 +25,7 @@ export function GraficoDonut({ data, activoId, onSliceClick, totalLabel = "Total
   return (
     <ChartContainer config={config} className="mx-auto aspect-square max-h-[260px]" role="img" aria-label={ariaLabel}>
       <PieChart>
-        <ChartTooltip content={<ChartTooltipContent nameKey="id" hideLabel />} />
+        <ChartTooltip content={<ChartTooltipContent hideLabel />} />
         <Pie
           data={data}
           dataKey="valor"
