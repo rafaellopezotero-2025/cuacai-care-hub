@@ -35,7 +35,7 @@ export function GraficoBarras({ data, activoId, onBarClick, ariaLabel, alto }: G
           tick={{ fontSize: 11 }}
         />
         <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-        <Bar dataKey="valor" radius={4} onClick={(entry) => onBarClick?.(entry as unknown as ItemBarra)} cursor={onBarClick ? "pointer" : undefined}>
+        <Bar dataKey="valor" radius={4} onClick={(entry: { payload?: ItemBarra } & ItemBarra) => onBarClick?.(entry.payload ?? entry)} cursor={onBarClick ? "pointer" : undefined}>
           {data.map((entry) => (
             <Cell key={entry.id} fill={entry.color} opacity={activoId && activoId !== entry.id ? 0.4 : 1} />
           ))}

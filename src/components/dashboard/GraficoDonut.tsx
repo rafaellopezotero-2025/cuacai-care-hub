@@ -33,7 +33,7 @@ export function GraficoDonut({ data, activoId, onSliceClick, totalLabel = "Total
           innerRadius="60%"
           outerRadius="90%"
           strokeWidth={2}
-          onClick={(entry) => onSliceClick?.(entry as unknown as ItemDonut)}
+          onClick={(entry: { payload?: ItemDonut } & ItemDonut) => onSliceClick?.(entry.payload ?? entry)}
         >
           {data.map((entry) => (
             <Cell
