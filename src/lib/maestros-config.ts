@@ -123,5 +123,5 @@ export interface FilaMaestro {
   activo: boolean;
   created_at: string;
   updated_at: string;
-  [campo: string]: unknown;
+  [campo: string]: string | number | boolean | null | undefined;
 }

@@ -16,6 +16,17 @@ import { Route as SetupRouteImport } from './routes/setup'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedConfiguracionTablaRouteImport } from './routes/_authenticated/configuracion/$tabla'
+import { Route as AuthenticatedPacientesIndexRouteImport } from './routes/_authenticated/pacientes/index'
+import { Route as AuthenticatedPacientesPacienteIdRouteImport } from './routes/_authenticated/pacientes/$pacienteId'
+import { Route as AuthenticatedPacientesNuevoRouteImport } from './routes/_authenticated/pacientes/nuevo'
+import { Route as AuthenticatedSistemaAuditoriaRouteImport } from './routes/_authenticated/sistema/auditoria'
+import { Route as AuthenticatedSistemaImportarRouteImport } from './routes/_authenticated/sistema/importar'
+import { Route as AuthenticatedSistemaRolesRouteImport } from './routes/_authenticated/sistema/roles'
+import { Route as AuthenticatedSistemaUsuariosRouteImport } from './routes/_authenticated/sistema/usuarios'
+import { Route as AuthenticatedTrasplantesIndexRouteImport } from './routes/_authenticated/trasplantes/index'
+import { Route as AuthenticatedTrasplantesNuevoRouteImport } from './routes/_authenticated/trasplantes/nuevo'
+import { Route as AuthenticatedPacientesPacienteIdEditarRouteImport } from './routes/_authenticated/pacientes/$pacienteId.editar'
+import { Route as AuthenticatedTrasplantesTrasplanteIdEditarRouteImport } from './routes/_authenticated/trasplantes/$trasplanteId.editar'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,6 +63,72 @@ const AuthenticatedConfiguracionTablaRoute =
     path: '/configuracion/$tabla',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPacientesIndexRoute =
+  AuthenticatedPacientesIndexRouteImport.update({
+    id: '/pacientes/',
+    path: '/pacientes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPacientesPacienteIdRoute =
+  AuthenticatedPacientesPacienteIdRouteImport.update({
+    id: '/pacientes/$pacienteId',
+    path: '/pacientes/$pacienteId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPacientesNuevoRoute =
+  AuthenticatedPacientesNuevoRouteImport.update({
+    id: '/pacientes/nuevo',
+    path: '/pacientes/nuevo',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSistemaAuditoriaRoute =
+  AuthenticatedSistemaAuditoriaRouteImport.update({
+    id: '/sistema/auditoria',
+    path: '/sistema/auditoria',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSistemaImportarRoute =
+  AuthenticatedSistemaImportarRouteImport.update({
+    id: '/sistema/importar',
+    path: '/sistema/importar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSistemaRolesRoute =
+  AuthenticatedSistemaRolesRouteImport.update({
+    id: '/sistema/roles',
+    path: '/sistema/roles',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedSistemaUsuariosRoute =
+  AuthenticatedSistemaUsuariosRouteImport.update({
+    id: '/sistema/usuarios',
+    path: '/sistema/usuarios',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTrasplantesIndexRoute =
+  AuthenticatedTrasplantesIndexRouteImport.update({
+    id: '/trasplantes/',
+    path: '/trasplantes/',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedTrasplantesNuevoRoute =
+  AuthenticatedTrasplantesNuevoRouteImport.update({
+    id: '/trasplantes/nuevo',
+    path: '/trasplantes/nuevo',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPacientesPacienteIdEditarRoute =
+  AuthenticatedPacientesPacienteIdEditarRouteImport.update({
+    id: '/editar',
+    path: '/editar',
+    getParentRoute: () => AuthenticatedPacientesPacienteIdRoute,
+  } as any)
+const AuthenticatedTrasplantesTrasplanteIdEditarRoute =
+  AuthenticatedTrasplantesTrasplanteIdEditarRouteImport.update({
+    id: '/trasplantes/$trasplanteId/editar',
+    path: '/trasplantes/$trasplanteId/editar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -60,6 +137,17 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
+  '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
+  '/sistema/auditoria': typeof AuthenticatedSistemaAuditoriaRoute
+  '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
+  '/sistema/roles': typeof AuthenticatedSistemaRolesRoute
+  '/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
+  '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
+  '/pacientes/': typeof AuthenticatedPacientesIndexRoute
+  '/trasplantes/': typeof AuthenticatedTrasplantesIndexRoute
+  '/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
+  '/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,6 +156,17 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
+  '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
+  '/sistema/auditoria': typeof AuthenticatedSistemaAuditoriaRoute
+  '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
+  '/sistema/roles': typeof AuthenticatedSistemaRolesRoute
+  '/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
+  '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
+  '/pacientes': typeof AuthenticatedPacientesIndexRoute
+  '/trasplantes': typeof AuthenticatedTrasplantesIndexRoute
+  '/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
+  '/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,6 +177,17 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/_authenticated/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
+  '/_authenticated/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
+  '/_authenticated/sistema/auditoria': typeof AuthenticatedSistemaAuditoriaRoute
+  '/_authenticated/sistema/importar': typeof AuthenticatedSistemaImportarRoute
+  '/_authenticated/sistema/roles': typeof AuthenticatedSistemaRolesRoute
+  '/_authenticated/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
+  '/_authenticated/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
+  '/_authenticated/pacientes/': typeof AuthenticatedPacientesIndexRoute
+  '/_authenticated/trasplantes/': typeof AuthenticatedTrasplantesIndexRoute
+  '/_authenticated/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
+  '/_authenticated/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -88,6 +198,17 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/$pacienteId'
+    | '/pacientes/nuevo'
+    | '/sistema/auditoria'
+    | '/sistema/importar'
+    | '/sistema/roles'
+    | '/sistema/usuarios'
+    | '/trasplantes/nuevo'
+    | '/pacientes/'
+    | '/trasplantes/'
+    | '/pacientes/$pacienteId/editar'
+    | '/trasplantes/$trasplanteId/editar'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -96,6 +217,17 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/$pacienteId'
+    | '/pacientes/nuevo'
+    | '/sistema/auditoria'
+    | '/sistema/importar'
+    | '/sistema/roles'
+    | '/sistema/usuarios'
+    | '/trasplantes/nuevo'
+    | '/pacientes'
+    | '/trasplantes'
+    | '/pacientes/$pacienteId/editar'
+    | '/trasplantes/$trasplanteId/editar'
   id:
     | '__root__'
     | '/'
@@ -105,6 +237,17 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/perfil'
     | '/_authenticated/configuracion/$tabla'
+    | '/_authenticated/pacientes/$pacienteId'
+    | '/_authenticated/pacientes/nuevo'
+    | '/_authenticated/sistema/auditoria'
+    | '/_authenticated/sistema/importar'
+    | '/_authenticated/sistema/roles'
+    | '/_authenticated/sistema/usuarios'
+    | '/_authenticated/trasplantes/nuevo'
+    | '/_authenticated/pacientes/'
+    | '/_authenticated/trasplantes/'
+    | '/_authenticated/pacientes/$pacienteId/editar'
+    | '/_authenticated/trasplantes/$trasplanteId/editar'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -165,19 +308,133 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedConfiguracionTablaRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes/': {
+      id: '/_authenticated/pacientes/'
+      path: '/pacientes'
+      fullPath: '/pacientes/'
+      preLoaderRoute: typeof AuthenticatedPacientesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pacientes/$pacienteId': {
+      id: '/_authenticated/pacientes/$pacienteId'
+      path: '/pacientes/$pacienteId'
+      fullPath: '/pacientes/$pacienteId'
+      preLoaderRoute: typeof AuthenticatedPacientesPacienteIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pacientes/nuevo': {
+      id: '/_authenticated/pacientes/nuevo'
+      path: '/pacientes/nuevo'
+      fullPath: '/pacientes/nuevo'
+      preLoaderRoute: typeof AuthenticatedPacientesNuevoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sistema/auditoria': {
+      id: '/_authenticated/sistema/auditoria'
+      path: '/sistema/auditoria'
+      fullPath: '/sistema/auditoria'
+      preLoaderRoute: typeof AuthenticatedSistemaAuditoriaRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sistema/importar': {
+      id: '/_authenticated/sistema/importar'
+      path: '/sistema/importar'
+      fullPath: '/sistema/importar'
+      preLoaderRoute: typeof AuthenticatedSistemaImportarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sistema/roles': {
+      id: '/_authenticated/sistema/roles'
+      path: '/sistema/roles'
+      fullPath: '/sistema/roles'
+      preLoaderRoute: typeof AuthenticatedSistemaRolesRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/sistema/usuarios': {
+      id: '/_authenticated/sistema/usuarios'
+      path: '/sistema/usuarios'
+      fullPath: '/sistema/usuarios'
+      preLoaderRoute: typeof AuthenticatedSistemaUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/trasplantes/': {
+      id: '/_authenticated/trasplantes/'
+      path: '/trasplantes'
+      fullPath: '/trasplantes/'
+      preLoaderRoute: typeof AuthenticatedTrasplantesIndexRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/trasplantes/nuevo': {
+      id: '/_authenticated/trasplantes/nuevo'
+      path: '/trasplantes/nuevo'
+      fullPath: '/trasplantes/nuevo'
+      preLoaderRoute: typeof AuthenticatedTrasplantesNuevoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pacientes/$pacienteId/editar': {
+      id: '/_authenticated/pacientes/$pacienteId/editar'
+      path: '/editar'
+      fullPath: '/pacientes/$pacienteId/editar'
+      preLoaderRoute: typeof AuthenticatedPacientesPacienteIdEditarRouteImport
+      parentRoute: typeof AuthenticatedPacientesPacienteIdRoute
+    }
+    '/_authenticated/trasplantes/$trasplanteId/editar': {
+      id: '/_authenticated/trasplantes/$trasplanteId/editar'
+      path: '/trasplantes/$trasplanteId/editar'
+      fullPath: '/trasplantes/$trasplanteId/editar'
+      preLoaderRoute: typeof AuthenticatedTrasplantesTrasplanteIdEditarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
   }
 }
+
+interface AuthenticatedPacientesPacienteIdRouteChildren {
+  AuthenticatedPacientesPacienteIdEditarRoute: typeof AuthenticatedPacientesPacienteIdEditarRoute
+}
+
+const AuthenticatedPacientesPacienteIdRouteChildren: AuthenticatedPacientesPacienteIdRouteChildren =
+  {
+    AuthenticatedPacientesPacienteIdEditarRoute:
+      AuthenticatedPacientesPacienteIdEditarRoute,
+  }
+
+const AuthenticatedPacientesPacienteIdRouteWithChildren =
+  AuthenticatedPacientesPacienteIdRoute._addFileChildren(
+    AuthenticatedPacientesPacienteIdRouteChildren,
+  )
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedConfiguracionTablaRoute: typeof AuthenticatedConfiguracionTablaRoute
+  AuthenticatedPacientesPacienteIdRoute: typeof AuthenticatedPacientesPacienteIdRouteWithChildren
+  AuthenticatedPacientesNuevoRoute: typeof AuthenticatedPacientesNuevoRoute
+  AuthenticatedSistemaAuditoriaRoute: typeof AuthenticatedSistemaAuditoriaRoute
+  AuthenticatedSistemaImportarRoute: typeof AuthenticatedSistemaImportarRoute
+  AuthenticatedSistemaRolesRoute: typeof AuthenticatedSistemaRolesRoute
+  AuthenticatedSistemaUsuariosRoute: typeof AuthenticatedSistemaUsuariosRoute
+  AuthenticatedTrasplantesNuevoRoute: typeof AuthenticatedTrasplantesNuevoRoute
+  AuthenticatedPacientesIndexRoute: typeof AuthenticatedPacientesIndexRoute
+  AuthenticatedTrasplantesIndexRoute: typeof AuthenticatedTrasplantesIndexRoute
+  AuthenticatedTrasplantesTrasplanteIdEditarRoute: typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedConfiguracionTablaRoute: AuthenticatedConfiguracionTablaRoute,
+  AuthenticatedPacientesPacienteIdRoute:
+    AuthenticatedPacientesPacienteIdRouteWithChildren,
+  AuthenticatedPacientesNuevoRoute: AuthenticatedPacientesNuevoRoute,
+  AuthenticatedSistemaAuditoriaRoute: AuthenticatedSistemaAuditoriaRoute,
+  AuthenticatedSistemaImportarRoute: AuthenticatedSistemaImportarRoute,
+  AuthenticatedSistemaRolesRoute: AuthenticatedSistemaRolesRoute,
+  AuthenticatedSistemaUsuariosRoute: AuthenticatedSistemaUsuariosRoute,
+  AuthenticatedTrasplantesNuevoRoute: AuthenticatedTrasplantesNuevoRoute,
+  AuthenticatedPacientesIndexRoute: AuthenticatedPacientesIndexRoute,
+  AuthenticatedTrasplantesIndexRoute: AuthenticatedTrasplantesIndexRoute,
+  AuthenticatedTrasplantesTrasplanteIdEditarRoute:
+    AuthenticatedTrasplantesTrasplanteIdEditarRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

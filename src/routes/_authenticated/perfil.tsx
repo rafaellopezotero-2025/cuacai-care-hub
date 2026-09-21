@@ -32,16 +32,23 @@ function PerfilPage() {
   const [confirmar, setConfirmar] = useState("");
   const [enviando, setEnviando] = useState(false);
 
-  const cambiar = async (e: FormEvent) => {
+  const cambiar = async (e: FormEvent): Promise<void> => {
     e.preventDefault();
-    if (nueva !== confirmar) return toast.error("Las contraseñas nuevas no coinciden.");
+    if (nueva !== confirmar) {
+      toast.error("Las contraseñas nuevas no coinciden.");
+      return;
+    }
     if (nueva.length < 10 || !/[A-Za-z]/.test(nueva) || !/[0-9]/.test(nueva)) {
-      return toast.error("La contraseña debe tener al menos 10 caracteres e incluir letras y números.");
+      toast.error("La contraseña debe tener al menos 10 caracteres e incluir letras y números.");
+      return;
     }
     setEnviando(true);
     const { error } = await supabase.auth.updateUser({ password: nueva, current_password: actual } as Parameters<typeof supabase.auth.updateUser>[0]);
     setEnviando(false);
-    if (error) return toast.error("No se pudo actualizar la contraseña. Verifique la contraseña actual.");
+    if (error) {
+      toast.error("No se pudo actualizar la contraseña. Verifique la contraseña actual.");
+      return;
+    }
     toast.success("Contraseña actualizada.");
     setActual("");
     setNueva("");

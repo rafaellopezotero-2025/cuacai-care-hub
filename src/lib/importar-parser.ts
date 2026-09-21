@@ -94,7 +94,9 @@ function convertirFecha(v: string | null): string | null {
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
   const match = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})$/);
   if (match) {
-    let [, d, m, a] = match;
+    const d = match[1] ?? "";
+    const m = match[2] ?? "";
+    let a = match[3] ?? "";
     if (a.length === 2) a = `20${a}`;
     const dd = d.padStart(2, "0");
     const mm = m.padStart(2, "0");
@@ -144,7 +146,7 @@ export async function parsearPlanilla(archivo: File): Promise<ResultadoParseo> {
   if (!hojaPacientes) {
     columnasFaltantes.push("Hoja 'Pacientes' no encontrada");
   } else {
-    const filas = XLSX.utils.sheet_to_json<Record<string, unknown>>(libro.Sheets[hojaPacientes], { defval: "" });
+    const filas = XLSX.utils.sheet_to_json<Record<string, unknown>>(libro.Sheets[hojaPacientes]!, { defval: "" });
     filas.forEach((fila, idx) => {
       const numeroFila = idx + 2; // +1 encabezado, +1 base 1
       const idPaciente = valor(fila, "id_paciente");
@@ -209,7 +211,7 @@ export async function parsearPlanilla(archivo: File): Promise<ResultadoParseo> {
   if (!hojaTrasplantes) {
     columnasFaltantes.push("Hoja 'Trasplantes' no encontrada");
   } else {
-    const filas = XLSX.utils.sheet_to_json<Record<string, unknown>>(libro.Sheets[hojaTrasplantes], { defval: "" });
+    const filas = XLSX.utils.sheet_to_json<Record<string, unknown>>(libro.Sheets[hojaTrasplantes]!, { defval: "" });
     filas.forEach((fila, idx) => {
       const numeroFila = idx + 2;
       const pacienteClave = valor(fila, "paciente_tx", "id_paciente") ?? "";

@@ -58,17 +58,17 @@ export const exportarPacientes = createServerFn({ method: "POST" })
     let offset = 0;
     while (filas.length < MAXIMO_FILAS) {
       const { data: pagina, error } = await context.supabase.rpc("buscar_pacientes", {
-        p_busqueda: filtros.q || undefined,
-        p_localidad: filtros.localidad || undefined,
-        p_diagnostico_id: filtros.diagnostico,
-        p_tipo_tx_id: filtros.tipo,
-        p_estado_id: filtros.estado,
-        p_cobertura_id: filtros.cobertura,
-        p_via_id: filtros.via,
-        p_medico_id: filtros.medico,
-        p_centro_id: filtros.centro,
-        p_desde: filtros.desde || undefined,
-        p_hasta: filtros.hasta || undefined,
+        ...(filtros.q ? { p_busqueda: filtros.q } : {}),
+        ...(filtros.localidad ? { p_localidad: filtros.localidad } : {}),
+        ...(filtros.diagnostico ? { p_diagnostico_id: filtros.diagnostico } : {}),
+        ...(filtros.tipo ? { p_tipo_tx_id: filtros.tipo } : {}),
+        ...(filtros.estado ? { p_estado_id: filtros.estado } : {}),
+        ...(filtros.cobertura ? { p_cobertura_id: filtros.cobertura } : {}),
+        ...(filtros.via ? { p_via_id: filtros.via } : {}),
+        ...(filtros.medico ? { p_medico_id: filtros.medico } : {}),
+        ...(filtros.centro ? { p_centro_id: filtros.centro } : {}),
+        ...(filtros.desde ? { p_desde: filtros.desde } : {}),
+        ...(filtros.hasta ? { p_hasta: filtros.hasta } : {}),
         p_incluir_inactivos: filtros.incluirInactivos ?? false,
         p_orden: "apellidos",
         p_dir: "asc",
@@ -92,8 +92,8 @@ export const exportarPacientes = createServerFn({ method: "POST" })
       p_action: "EXPORT",
       p_entity: "pacientes",
       p_detalle: { filtros, cantidad: filas.length, formato },
-      p_ip: meta.ip ?? undefined,
-      p_user_agent: meta.userAgent ?? undefined,
+      ...(meta.ip ? { p_ip: meta.ip } : {}),
+      ...(meta.userAgent ? { p_user_agent: meta.userAgent } : {}),
     });
 
     return filas;

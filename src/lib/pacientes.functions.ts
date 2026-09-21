@@ -53,17 +53,17 @@ export const buscarPacientes = createServerFn({ method: "GET" })
   .handler(async ({ context, data }): Promise<{ filas: FilaBusquedaPaciente[]; total: number }> => {
     const pagina = data.pagina ?? 1;
     const { data: filas, error } = await context.supabase.rpc("buscar_pacientes", {
-      p_busqueda: data.q || undefined,
-      p_localidad: data.localidad || undefined,
-      p_diagnostico_id: data.diagnostico,
-      p_tipo_tx_id: data.tipo,
-      p_estado_id: data.estado,
-      p_cobertura_id: data.cobertura,
-      p_via_id: data.via,
-      p_medico_id: data.medico,
-      p_centro_id: data.centro,
-      p_desde: data.desde || undefined,
-      p_hasta: data.hasta || undefined,
+      ...(data.q ? { p_busqueda: data.q } : {}),
+      ...(data.localidad ? { p_localidad: data.localidad } : {}),
+      ...(data.diagnostico ? { p_diagnostico_id: data.diagnostico } : {}),
+      ...(data.tipo ? { p_tipo_tx_id: data.tipo } : {}),
+      ...(data.estado ? { p_estado_id: data.estado } : {}),
+      ...(data.cobertura ? { p_cobertura_id: data.cobertura } : {}),
+      ...(data.via ? { p_via_id: data.via } : {}),
+      ...(data.medico ? { p_medico_id: data.medico } : {}),
+      ...(data.centro ? { p_centro_id: data.centro } : {}),
+      ...(data.desde ? { p_desde: data.desde } : {}),
+      ...(data.hasta ? { p_hasta: data.hasta } : {}),
       p_incluir_inactivos: data.incluirInactivos ?? false,
       p_orden: data.orden ?? "apellidos",
       p_dir: data.dir ?? "asc",
@@ -112,8 +112,8 @@ export const obtenerPaciente = createServerFn({ method: "GET" })
       p_entity: "pacientes",
       p_entity_id: data.id,
       p_paciente_id: data.id,
-      p_ip: meta.ip ?? undefined,
-      p_user_agent: meta.userAgent ?? undefined,
+      ...(meta.ip ? { p_ip: meta.ip } : {}),
+      ...(meta.userAgent ? { p_user_agent: meta.userAgent } : {}),
     });
 
     return { paciente, trasplantes: (trasplantes ?? []) as unknown as TrasplanteConJoins[] };
@@ -155,7 +155,11 @@ export const crearPaciente = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => pacienteSchema.parse(input))
   .handler(async ({ context, data }): Promise<{ id: string }> => {
-    const { data: creado, error } = await context.supabase.from("pacientes").insert(data).select("id").single();
+    const { data: creado, error } = await context.supabase
+      .from("pacientes")
+      .insert({ ...data, sexo: data.sexo ?? null })
+      .select("id")
+      .single();
     if (error) {
       if (error.code === "23505") throw new AppError("Ya existe un paciente con ese DNI.", "DUPLICADO");
       throw aAppError(error);
@@ -169,7 +173,10 @@ export const actualizarPaciente = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ id: uuid }).and(pacienteSchema).parse(input))
   .handler(async ({ context, data }): Promise<void> => {
     const { id, ...cambios } = data;
-    const { error } = await context.supabase.from("pacientes").update(cambios).eq("id", id);
+    const { error } = await context.supabase
+      .from("pacientes")
+      .update({ ...cambios, sexo: cambios.sexo ?? null })
+      .eq("id", id);
     if (error) {
       if (error.code === "23505") throw new AppError("Ya existe un paciente con ese DNI.", "DUPLICADO");
       throw aAppError(error);
