@@ -41,9 +41,8 @@ export const Route = createFileRoute("/_authenticated/trasplantes/")({
       { property: "og:description", content: "Listado y filtros de procesos de trasplante del programa CUCAIER." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "robots", content: "noindex" },
     ],
-    meta2: undefined,
-    robots: "noindex",
   }),
   component: TrasplantesListadoPage,
 });
@@ -74,7 +73,7 @@ function TrasplantesListadoPage() {
         acciones={
           <RequierePermiso permiso={PERMISOS.trasplantesCrear} silencioso>
             <Button asChild>
-              <Link to="/trasplantes/nuevo" search={{ pacienteId: undefined }}>
+              <Link to="/trasplantes/nuevo">
                 <Plus /> Nuevo proceso
               </Link>
             </Button>
