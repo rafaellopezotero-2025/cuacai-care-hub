@@ -61,14 +61,15 @@ export const obtenerDashboard = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => filtrosDashboardSchema.parse(input ?? {}))
   .handler(async ({ context, data }): Promise<DashboardResumen> => {
-    const rpcArgs: Record<string, string> = {};
-    if (data.desde) rpcArgs.p_desde = data.desde;
-    if (data.hasta) rpcArgs.p_hasta = data.hasta;
-    if (data.estado) rpcArgs.p_estado_id = data.estado;
-    if (data.tipo) rpcArgs.p_tipo_tx_id = data.tipo;
-    if (data.cobertura) rpcArgs.p_cobertura_id = data.cobertura;
-    if (data.centro) rpcArgs.p_centro_id = data.centro;
-    if (data.localidad) rpcArgs.p_localidad = data.localidad;
+    const rpcArgs = {
+      ...(data.desde ? { p_desde: data.desde } : {}),
+      ...(data.hasta ? { p_hasta: data.hasta } : {}),
+      ...(data.estado ? { p_estado_id: data.estado } : {}),
+      ...(data.tipo ? { p_tipo_tx_id: data.tipo } : {}),
+      ...(data.cobertura ? { p_cobertura_id: data.cobertura } : {}),
+      ...(data.centro ? { p_centro_id: data.centro } : {}),
+      ...(data.localidad ? { p_localidad: data.localidad } : {}),
+    };
 
     const { data: resultado, error } = await context.supabase.rpc("dashboard_resumen", rpcArgs);
     if (error) throw aAppError(error);
