@@ -112,8 +112,8 @@ export const obtenerPaciente = createServerFn({ method: "GET" })
       p_entity: "pacientes",
       p_entity_id: data.id,
       p_paciente_id: data.id,
-      p_ip: meta.ip ?? undefined,
-      p_user_agent: meta.userAgent ?? undefined,
+      ...(meta.ip ? { p_ip: meta.ip } : {}),
+      ...(meta.userAgent ? { p_user_agent: meta.userAgent } : {}),
     });
 
     return { paciente, trasplantes: (trasplantes ?? []) as unknown as TrasplanteConJoins[] };

@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { z } from "zod";
 import { toast } from "sonner";
@@ -32,7 +32,6 @@ export const Route = createFileRoute("/_authenticated/trasplantes/nuevo")({
 
 function NuevoTrasplantePage() {
   const { pacienteId } = Route.useSearch();
-  const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const pacienteQuery = useQuery({
