@@ -173,7 +173,10 @@ export const actualizarPaciente = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => z.object({ id: uuid }).and(pacienteSchema).parse(input))
   .handler(async ({ context, data }): Promise<void> => {
     const { id, ...cambios } = data;
-    const { error } = await context.supabase.from("pacientes").update(cambios).eq("id", id);
+    const { error } = await context.supabase
+      .from("pacientes")
+      .update({ ...cambios, sexo: cambios.sexo ?? null })
+      .eq("id", id);
     if (error) {
       if (error.code === "23505") throw new AppError("Ya existe un paciente con ese DNI.", "DUPLICADO");
       throw aAppError(error);
