@@ -180,7 +180,7 @@ function TrasplantesListadoPage() {
                     ) : null}
                   </TableCell>
                   <TableCell>
-                    <EstadoBadge codigo={tx.estados_tx?.codigo} nombre={tx.estados_tx?.estado_tx} />
+                    <EstadoBadge codigo={tx.estados_tx?.codigo ?? null} nombre={tx.estados_tx?.estado_tx ?? null} />
                   </TableCell>
                   <TableCell>{tx.tipos_tx?.tipo_tx ?? "—"}</TableCell>
                   <TableCell>{tx.centros_tx?.nombre ?? "—"}</TableCell>

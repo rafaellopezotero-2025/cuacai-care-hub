@@ -92,8 +92,8 @@ export const exportarPacientes = createServerFn({ method: "POST" })
       p_action: "EXPORT",
       p_entity: "pacientes",
       p_detalle: { filtros, cantidad: filas.length, formato },
-      p_ip: meta.ip ?? undefined,
-      p_user_agent: meta.userAgent ?? undefined,
+      ...(meta.ip ? { p_ip: meta.ip } : {}),
+      ...(meta.userAgent ? { p_user_agent: meta.userAgent } : {}),
     });
 
     return filas;

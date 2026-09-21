@@ -74,10 +74,8 @@ function NuevoTrasplantePage() {
       />
       <div className="card-surface max-w-3xl rounded-md p-6">
         <TrasplanteForm
-          valoresIniciales={pacienteId ? { ...TRASPLANTE_FORM_DEFAULTS, paciente_id: pacienteId } : undefined}
-          pacientePreseleccionado={
-            paciente ? { id: paciente.id, nombres: paciente.nombres, apellidos: paciente.apellidos, dni: paciente.dni } : undefined
-          }
+          {...(pacienteId ? { valoresIniciales: { ...TRASPLANTE_FORM_DEFAULTS, paciente_id: pacienteId } } : {})}
+          {...(paciente ? { pacientePreseleccionado: { id: paciente.id, nombres: paciente.nombres, apellidos: paciente.apellidos, dni: paciente.dni } } : {})}
           pacienteBloqueado={!!pacienteId}
           enviando={crearMutacion.isPending}
           onSubmit={(valores) => crearMutacion.mutate(valores)}

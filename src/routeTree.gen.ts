@@ -21,6 +21,7 @@ import { Route as AuthenticatedPacientesNuevoRouteImport } from './routes/_authe
 import { Route as AuthenticatedSistemaImportarRouteImport } from './routes/_authenticated/sistema/importar'
 import { Route as AuthenticatedTrasplantesIndexRouteImport } from './routes/_authenticated/trasplantes/index'
 import { Route as AuthenticatedTrasplantesNuevoRouteImport } from './routes/_authenticated/trasplantes/nuevo'
+import { Route as AuthenticatedPacientesPacienteIdEditarRouteImport } from './routes/_authenticated/pacientes/$pacienteId.editar'
 import { Route as AuthenticatedTrasplantesTrasplanteIdEditarRouteImport } from './routes/_authenticated/trasplantes/$trasplanteId.editar'
 
 const IndexRoute = IndexRouteImport.update({
@@ -88,6 +89,12 @@ const AuthenticatedTrasplantesNuevoRoute =
     path: '/trasplantes/nuevo',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPacientesPacienteIdEditarRoute =
+  AuthenticatedPacientesPacienteIdEditarRouteImport.update({
+    id: '/pacientes/$pacienteId/editar',
+    path: '/pacientes/$pacienteId/editar',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedTrasplantesTrasplanteIdEditarRoute =
   AuthenticatedTrasplantesTrasplanteIdEditarRouteImport.update({
     id: '/trasplantes/$trasplanteId/editar',
@@ -107,6 +114,7 @@ export interface FileRoutesByFullPath {
   '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/pacientes/': typeof AuthenticatedPacientesIndexRoute
   '/trasplantes/': typeof AuthenticatedTrasplantesIndexRoute
+  '/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
   '/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRoutesByTo {
@@ -121,6 +129,7 @@ export interface FileRoutesByTo {
   '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/pacientes': typeof AuthenticatedPacientesIndexRoute
   '/trasplantes': typeof AuthenticatedTrasplantesIndexRoute
+  '/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
   '/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRoutesById {
@@ -137,6 +146,7 @@ export interface FileRoutesById {
   '/_authenticated/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/_authenticated/pacientes/': typeof AuthenticatedPacientesIndexRoute
   '/_authenticated/trasplantes/': typeof AuthenticatedTrasplantesIndexRoute
+  '/_authenticated/pacientes/$pacienteId/editar': typeof AuthenticatedPacientesPacienteIdEditarRoute
   '/_authenticated/trasplantes/$trasplanteId/editar': typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 export interface FileRouteTypes {
@@ -153,6 +163,7 @@ export interface FileRouteTypes {
     | '/trasplantes/nuevo'
     | '/pacientes/'
     | '/trasplantes/'
+    | '/pacientes/$pacienteId/editar'
     | '/trasplantes/$trasplanteId/editar'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -167,6 +178,7 @@ export interface FileRouteTypes {
     | '/trasplantes/nuevo'
     | '/pacientes'
     | '/trasplantes'
+    | '/pacientes/$pacienteId/editar'
     | '/trasplantes/$trasplanteId/editar'
   id:
     | '__root__'
@@ -182,6 +194,7 @@ export interface FileRouteTypes {
     | '/_authenticated/trasplantes/nuevo'
     | '/_authenticated/pacientes/'
     | '/_authenticated/trasplantes/'
+    | '/_authenticated/pacientes/$pacienteId/editar'
     | '/_authenticated/trasplantes/$trasplanteId/editar'
   fileRoutesById: FileRoutesById
 }
@@ -278,6 +291,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTrasplantesNuevoRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes/$pacienteId/editar': {
+      id: '/_authenticated/pacientes/$pacienteId/editar'
+      path: '/pacientes/$pacienteId/editar'
+      fullPath: '/pacientes/$pacienteId/editar'
+      preLoaderRoute: typeof AuthenticatedPacientesPacienteIdEditarRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/trasplantes/$trasplanteId/editar': {
       id: '/_authenticated/trasplantes/$trasplanteId/editar'
       path: '/trasplantes/$trasplanteId/editar'
@@ -297,6 +317,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedTrasplantesNuevoRoute: typeof AuthenticatedTrasplantesNuevoRoute
   AuthenticatedPacientesIndexRoute: typeof AuthenticatedPacientesIndexRoute
   AuthenticatedTrasplantesIndexRoute: typeof AuthenticatedTrasplantesIndexRoute
+  AuthenticatedPacientesPacienteIdEditarRoute: typeof AuthenticatedPacientesPacienteIdEditarRoute
   AuthenticatedTrasplantesTrasplanteIdEditarRoute: typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 
@@ -309,6 +330,8 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedTrasplantesNuevoRoute: AuthenticatedTrasplantesNuevoRoute,
   AuthenticatedPacientesIndexRoute: AuthenticatedPacientesIndexRoute,
   AuthenticatedTrasplantesIndexRoute: AuthenticatedTrasplantesIndexRoute,
+  AuthenticatedPacientesPacienteIdEditarRoute:
+    AuthenticatedPacientesPacienteIdEditarRoute,
   AuthenticatedTrasplantesTrasplanteIdEditarRoute:
     AuthenticatedTrasplantesTrasplanteIdEditarRoute,
 }
