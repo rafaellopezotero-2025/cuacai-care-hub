@@ -17,6 +17,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedConfiguracionTablaRouteImport } from './routes/_authenticated/configuracion/$tabla'
 import { Route as AuthenticatedPacientesIndexRouteImport } from './routes/_authenticated/pacientes/index'
+import { Route as AuthenticatedPacientesNuevoRouteImport } from './routes/_authenticated/pacientes/nuevo'
 import { Route as AuthenticatedSistemaImportarRouteImport } from './routes/_authenticated/sistema/importar'
 import { Route as AuthenticatedTrasplantesIndexRouteImport } from './routes/_authenticated/trasplantes/index'
 import { Route as AuthenticatedTrasplantesNuevoRouteImport } from './routes/_authenticated/trasplantes/nuevo'
@@ -63,6 +64,12 @@ const AuthenticatedPacientesIndexRoute =
     path: '/pacientes/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPacientesNuevoRoute =
+  AuthenticatedPacientesNuevoRouteImport.update({
+    id: '/pacientes/nuevo',
+    path: '/pacientes/nuevo',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedSistemaImportarRoute =
   AuthenticatedSistemaImportarRouteImport.update({
     id: '/sistema/importar',
@@ -95,6 +102,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/pacientes/': typeof AuthenticatedPacientesIndexRoute
@@ -108,6 +116,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/pacientes': typeof AuthenticatedPacientesIndexRoute
@@ -123,6 +132,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/_authenticated/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/_authenticated/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/_authenticated/trasplantes/nuevo': typeof AuthenticatedTrasplantesNuevoRoute
   '/_authenticated/pacientes/': typeof AuthenticatedPacientesIndexRoute
@@ -138,6 +148,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/nuevo'
     | '/sistema/importar'
     | '/trasplantes/nuevo'
     | '/pacientes/'
@@ -151,6 +162,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/nuevo'
     | '/sistema/importar'
     | '/trasplantes/nuevo'
     | '/pacientes'
@@ -165,6 +177,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/perfil'
     | '/_authenticated/configuracion/$tabla'
+    | '/_authenticated/pacientes/nuevo'
     | '/_authenticated/sistema/importar'
     | '/_authenticated/trasplantes/nuevo'
     | '/_authenticated/pacientes/'
@@ -237,6 +250,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPacientesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes/nuevo': {
+      id: '/_authenticated/pacientes/nuevo'
+      path: '/pacientes/nuevo'
+      fullPath: '/pacientes/nuevo'
+      preLoaderRoute: typeof AuthenticatedPacientesNuevoRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/sistema/importar': {
       id: '/_authenticated/sistema/importar'
       path: '/sistema/importar'
@@ -272,6 +292,7 @@ interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedConfiguracionTablaRoute: typeof AuthenticatedConfiguracionTablaRoute
+  AuthenticatedPacientesNuevoRoute: typeof AuthenticatedPacientesNuevoRoute
   AuthenticatedSistemaImportarRoute: typeof AuthenticatedSistemaImportarRoute
   AuthenticatedTrasplantesNuevoRoute: typeof AuthenticatedTrasplantesNuevoRoute
   AuthenticatedPacientesIndexRoute: typeof AuthenticatedPacientesIndexRoute
@@ -283,6 +304,7 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedConfiguracionTablaRoute: AuthenticatedConfiguracionTablaRoute,
+  AuthenticatedPacientesNuevoRoute: AuthenticatedPacientesNuevoRoute,
   AuthenticatedSistemaImportarRoute: AuthenticatedSistemaImportarRoute,
   AuthenticatedTrasplantesNuevoRoute: AuthenticatedTrasplantesNuevoRoute,
   AuthenticatedPacientesIndexRoute: AuthenticatedPacientesIndexRoute,
