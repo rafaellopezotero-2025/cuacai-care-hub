@@ -94,7 +94,9 @@ function convertirFecha(v: string | null): string | null {
   if (/^\d{4}-\d{2}-\d{2}$/.test(s)) return s;
   const match = s.match(/^(\d{1,2})[/-](\d{1,2})[/-](\d{2,4})$/);
   if (match) {
-    let [, d, m, a] = match as [string, string, string, string];
+    const d = match[1] ?? "";
+    const m = match[2] ?? "";
+    let a = match[3] ?? "";
     if (a.length === 2) a = `20${a}`;
     const dd = d.padStart(2, "0");
     const mm = m.padStart(2, "0");
