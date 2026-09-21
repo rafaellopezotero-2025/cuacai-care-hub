@@ -155,7 +155,11 @@ export const crearPaciente = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => pacienteSchema.parse(input))
   .handler(async ({ context, data }): Promise<{ id: string }> => {
-    const { data: creado, error } = await context.supabase.from("pacientes").insert(data).select("id").single();
+    const { data: creado, error } = await context.supabase
+      .from("pacientes")
+      .insert({ ...data, sexo: data.sexo ?? null })
+      .select("id")
+      .single();
     if (error) {
       if (error.code === "23505") throw new AppError("Ya existe un paciente con ese DNI.", "DUPLICADO");
       throw aAppError(error);
