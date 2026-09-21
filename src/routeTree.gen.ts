@@ -17,6 +17,7 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated/perfil'
 import { Route as AuthenticatedConfiguracionTablaRouteImport } from './routes/_authenticated/configuracion/$tabla'
 import { Route as AuthenticatedPacientesIndexRouteImport } from './routes/_authenticated/pacientes/index'
+import { Route as AuthenticatedPacientesPacienteIdRouteImport } from './routes/_authenticated/pacientes/$pacienteId'
 import { Route as AuthenticatedPacientesNuevoRouteImport } from './routes/_authenticated/pacientes/nuevo'
 import { Route as AuthenticatedSistemaImportarRouteImport } from './routes/_authenticated/sistema/importar'
 import { Route as AuthenticatedSistemaUsuariosRouteImport } from './routes/_authenticated/sistema/usuarios'
@@ -66,6 +67,12 @@ const AuthenticatedPacientesIndexRoute =
     path: '/pacientes/',
     getParentRoute: () => AuthenticatedRouteRoute,
   } as any)
+const AuthenticatedPacientesPacienteIdRoute =
+  AuthenticatedPacientesPacienteIdRouteImport.update({
+    id: '/pacientes/$pacienteId',
+    path: '/pacientes/$pacienteId',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
 const AuthenticatedPacientesNuevoRoute =
   AuthenticatedPacientesNuevoRouteImport.update({
     id: '/pacientes/nuevo',
@@ -98,9 +105,9 @@ const AuthenticatedTrasplantesNuevoRoute =
   } as any)
 const AuthenticatedPacientesPacienteIdEditarRoute =
   AuthenticatedPacientesPacienteIdEditarRouteImport.update({
-    id: '/pacientes/$pacienteId/editar',
-    path: '/pacientes/$pacienteId/editar',
-    getParentRoute: () => AuthenticatedRouteRoute,
+    id: '/editar',
+    path: '/editar',
+    getParentRoute: () => AuthenticatedPacientesPacienteIdRoute,
   } as any)
 const AuthenticatedTrasplantesTrasplanteIdEditarRoute =
   AuthenticatedTrasplantesTrasplanteIdEditarRouteImport.update({
@@ -116,6 +123,7 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
   '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
@@ -132,6 +140,7 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
   '/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
@@ -150,6 +159,7 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/configuracion/$tabla': typeof AuthenticatedConfiguracionTablaRoute
+  '/_authenticated/pacientes/$pacienteId': typeof AuthenticatedPacientesPacienteIdRouteWithChildren
   '/_authenticated/pacientes/nuevo': typeof AuthenticatedPacientesNuevoRoute
   '/_authenticated/sistema/importar': typeof AuthenticatedSistemaImportarRoute
   '/_authenticated/sistema/usuarios': typeof AuthenticatedSistemaUsuariosRoute
@@ -168,6 +178,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/$pacienteId'
     | '/pacientes/nuevo'
     | '/sistema/importar'
     | '/sistema/usuarios'
@@ -184,6 +195,7 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/perfil'
     | '/configuracion/$tabla'
+    | '/pacientes/$pacienteId'
     | '/pacientes/nuevo'
     | '/sistema/importar'
     | '/sistema/usuarios'
@@ -201,6 +213,7 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/perfil'
     | '/_authenticated/configuracion/$tabla'
+    | '/_authenticated/pacientes/$pacienteId'
     | '/_authenticated/pacientes/nuevo'
     | '/_authenticated/sistema/importar'
     | '/_authenticated/sistema/usuarios'
@@ -276,6 +289,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPacientesIndexRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/pacientes/$pacienteId': {
+      id: '/_authenticated/pacientes/$pacienteId'
+      path: '/pacientes/$pacienteId'
+      fullPath: '/pacientes/$pacienteId'
+      preLoaderRoute: typeof AuthenticatedPacientesPacienteIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/pacientes/nuevo': {
       id: '/_authenticated/pacientes/nuevo'
       path: '/pacientes/nuevo'
@@ -313,10 +333,10 @@ declare module '@tanstack/react-router' {
     }
     '/_authenticated/pacientes/$pacienteId/editar': {
       id: '/_authenticated/pacientes/$pacienteId/editar'
-      path: '/pacientes/$pacienteId/editar'
+      path: '/editar'
       fullPath: '/pacientes/$pacienteId/editar'
       preLoaderRoute: typeof AuthenticatedPacientesPacienteIdEditarRouteImport
-      parentRoute: typeof AuthenticatedRouteRoute
+      parentRoute: typeof AuthenticatedPacientesPacienteIdRoute
     }
     '/_authenticated/trasplantes/$trasplanteId/editar': {
       id: '/_authenticated/trasplantes/$trasplanteId/editar'
@@ -328,17 +348,32 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthenticatedPacientesPacienteIdRouteChildren {
+  AuthenticatedPacientesPacienteIdEditarRoute: typeof AuthenticatedPacientesPacienteIdEditarRoute
+}
+
+const AuthenticatedPacientesPacienteIdRouteChildren: AuthenticatedPacientesPacienteIdRouteChildren =
+  {
+    AuthenticatedPacientesPacienteIdEditarRoute:
+      AuthenticatedPacientesPacienteIdEditarRoute,
+  }
+
+const AuthenticatedPacientesPacienteIdRouteWithChildren =
+  AuthenticatedPacientesPacienteIdRoute._addFileChildren(
+    AuthenticatedPacientesPacienteIdRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedConfiguracionTablaRoute: typeof AuthenticatedConfiguracionTablaRoute
+  AuthenticatedPacientesPacienteIdRoute: typeof AuthenticatedPacientesPacienteIdRouteWithChildren
   AuthenticatedPacientesNuevoRoute: typeof AuthenticatedPacientesNuevoRoute
   AuthenticatedSistemaImportarRoute: typeof AuthenticatedSistemaImportarRoute
   AuthenticatedSistemaUsuariosRoute: typeof AuthenticatedSistemaUsuariosRoute
   AuthenticatedTrasplantesNuevoRoute: typeof AuthenticatedTrasplantesNuevoRoute
   AuthenticatedPacientesIndexRoute: typeof AuthenticatedPacientesIndexRoute
   AuthenticatedTrasplantesIndexRoute: typeof AuthenticatedTrasplantesIndexRoute
-  AuthenticatedPacientesPacienteIdEditarRoute: typeof AuthenticatedPacientesPacienteIdEditarRoute
   AuthenticatedTrasplantesTrasplanteIdEditarRoute: typeof AuthenticatedTrasplantesTrasplanteIdEditarRoute
 }
 
@@ -346,14 +381,14 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedConfiguracionTablaRoute: AuthenticatedConfiguracionTablaRoute,
+  AuthenticatedPacientesPacienteIdRoute:
+    AuthenticatedPacientesPacienteIdRouteWithChildren,
   AuthenticatedPacientesNuevoRoute: AuthenticatedPacientesNuevoRoute,
   AuthenticatedSistemaImportarRoute: AuthenticatedSistemaImportarRoute,
   AuthenticatedSistemaUsuariosRoute: AuthenticatedSistemaUsuariosRoute,
   AuthenticatedTrasplantesNuevoRoute: AuthenticatedTrasplantesNuevoRoute,
   AuthenticatedPacientesIndexRoute: AuthenticatedPacientesIndexRoute,
   AuthenticatedTrasplantesIndexRoute: AuthenticatedTrasplantesIndexRoute,
-  AuthenticatedPacientesPacienteIdEditarRoute:
-    AuthenticatedPacientesPacienteIdEditarRoute,
   AuthenticatedTrasplantesTrasplanteIdEditarRoute:
     AuthenticatedTrasplantesTrasplanteIdEditarRoute,
 }
