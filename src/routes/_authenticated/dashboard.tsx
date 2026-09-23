@@ -138,35 +138,35 @@ function DashboardPage() {
     id: t.id,
     nombre: t.nombre,
     valor: t.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porCobertura: ItemDonut[] = (datos?.por_cobertura ?? []).map((c, i) => ({
     id: c.id,
     nombre: c.nombre,
     valor: c.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porVia: ItemBarra[] = (datos?.por_via ?? []).map((v, i) => ({
     id: v.id,
     nombre: v.nombre,
     valor: v.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porCentro: ItemBarra[] = (datos?.por_centro ?? []).map((c, i) => ({
     id: c.id,
     nombre: c.nombre,
     valor: c.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const localidadesOrdenadas = [...(datos?.por_localidad ?? [])].sort((a, b) => b.valor - a.valor);
   const top10 = localidadesOrdenadas.slice(0, 10);
   const otras = localidadesOrdenadas.slice(10).reduce((acc, l) => acc + l.valor, 0);
   const porLocalidad: ItemBarra[] = [
-    ...top10.map((l, i) => ({ id: l.nombre, nombre: l.nombre, valor: l.valor, color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] })),
+    ...top10.map((l, i) => ({ id: l.nombre, nombre: l.nombre, valor: l.valor,  color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)" })),
     ...(otras > 0 ? [{ id: "__otras__", nombre: "Otras", valor: otras, color: "var(--muted-foreground)" }] : []),
   ];
 

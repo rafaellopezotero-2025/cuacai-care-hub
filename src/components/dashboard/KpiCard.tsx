@@ -4,10 +4,10 @@ import { cn } from "@/lib/utils";
 interface KpiCardProps {
   titulo: string;
   valor: number;
-  activo?: boolean;
-  icono?: ReactNode;
-  onClick?: () => void;
-  className?: string;
+  activo?: boolean | undefined;
+  icono?: ReactNode | undefined;
+  onClick?: (() => void) | undefined;
+  className?: string | undefined;
 }
 
 /** Tarjeta de indicador clave del dashboard, opcionalmente clicable para filtrar. */
