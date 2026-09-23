@@ -8,6 +8,13 @@
       "when": 1789732960999,
       "tag": "0000_cucaier_esquema_base",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1790165869964,
+      "tag": "0001_importar_lote",
+      "breakpoints": true
     }
   ]
 }

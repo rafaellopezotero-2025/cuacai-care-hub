@@ -1,30 +1,3 @@
--- =====================================================================
--- Migración 0001: importación masiva de pacientes/trasplantes (Excel)
--- Fase 8. Aplicar DESPUÉS de 0000_cucaier_esquema_base.sql.
--- =====================================================================
-
--- public.importar_lote: procesa en una única transacción un lote de
--- pacientes y trasplantes provenientes de una planilla validada en el
--- cliente (src/lib/importar-parser.ts) y confirmada por el servidor
--- (src/lib/importar.functions.ts). SECURITY INVOKER: corre con los
--- permisos/RLS del usuario que ejecuta la importación, por lo que las
--- políticas de pacientes/trasplantes y los triggers de auditoría por
--- fila se aplican igual que si cada INSERT se hiciera manualmente.
---
--- p_pacientes: jsonb[] de objetos con:
---   clave (text, identificador temporal de la fila en la planilla),
---   nombres, apellidos, dni, fecha_nacimiento (date|null), sexo,
---   localidad, telefono, telefono_alternativo, email, domicilio,
---   observaciones.
--- p_trasplantes: jsonb[] de objetos con:
---   paciente_clave (referencia a la "clave" de un paciente del lote),
---   diagnostico, tipo_tx, estado_codigo, estado_tx, via_admin,
---   cobertura, centro_tx, medico_matricula, medico, fecha_tx (date|null),
---   observaciones.
---
--- Si cualquier maestro no puede resolverse por nombre (case-insensitive)
--- se lanza una excepción y toda la transacción se revierte (comportamiento
--- "todo o nada" intencional).
 CREATE OR REPLACE FUNCTION public.importar_lote(p_pacientes jsonb, p_trasplantes jsonb)
 RETURNS jsonb
 LANGUAGE plpgsql
@@ -61,7 +34,6 @@ BEGIN
     RAISE EXCEPTION 'p_trasplantes debe ser un array jsonb' USING ERRCODE = '22023';
   END IF;
 
-  -- ---------- Pacientes ----------
   FOR v_paciente IN SELECT * FROM jsonb_array_elements(p_pacientes)
   LOOP
     v_clave := v_paciente ->> 'clave';
@@ -100,7 +72,6 @@ BEGIN
     v_mapa := v_mapa || jsonb_build_object(v_clave, v_paciente_id::text);
   END LOOP;
 
-  -- ---------- Trasplantes ----------
   FOR v_tx IN SELECT * FROM jsonb_array_elements(p_trasplantes)
   LOOP
     v_clave := v_tx ->> 'paciente_clave';
@@ -114,7 +85,7 @@ BEGIN
     IF v_nombre IS NOT NULL THEN
       SELECT id INTO v_diagnostico_id FROM public.diagnosticos WHERE lower(trim(diagnostico)) = lower(v_nombre);
       IF v_diagnostico_id IS NULL THEN
-        RAISE EXCEPTION 'Diagnóstico "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
+        RAISE EXCEPTION 'Diagnostico "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
       END IF;
     END IF;
 
@@ -147,7 +118,7 @@ BEGIN
     IF v_nombre IS NOT NULL THEN
       SELECT id INTO v_via_admin_id FROM public.vias_admin WHERE lower(trim(descripcion)) = lower(v_nombre);
       IF v_via_admin_id IS NULL THEN
-        RAISE EXCEPTION 'Vía administrativa "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
+        RAISE EXCEPTION 'Via administrativa "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
       END IF;
     END IF;
 
@@ -181,7 +152,7 @@ BEGIN
         WHERE lower(trim(apellidos || ', ' || nombres)) = lower(v_nombre)
            OR lower(trim(nombres || ' ' || apellidos)) = lower(v_nombre);
         IF v_medico_ref_id IS NULL THEN
-          RAISE EXCEPTION 'Médico de referencia "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
+          RAISE EXCEPTION 'Medico de referencia "%" no existe en tablas maestras', v_nombre USING ERRCODE = '23503';
         END IF;
       END IF;
     END IF;

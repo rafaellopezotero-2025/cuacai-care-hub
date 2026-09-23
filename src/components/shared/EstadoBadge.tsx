@@ -9,9 +9,9 @@ const ESTILOS: Record<string, string> = {
 };
 
 interface EstadoBadgeProps {
-  codigo?: string | null;
-  nombre?: string | null;
-  className?: string;
+  codigo?: string | null | undefined;
+  nombre?: string | null | undefined;
+  className?: string | undefined;
 }
 
 /** Etiqueta de estado del proceso de trasplante, coloreada según código configurable. */

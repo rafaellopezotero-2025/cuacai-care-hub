@@ -344,8 +344,8 @@ function TablaEncabezadoOrdenable({
   children,
 }: {
   campo: "apellidos" | "dni" | "localidad" | "estado" | "fecha_tx";
-  actual?: string;
-  dir?: string;
+  actual?: string | undefined;
+  dir?: string | undefined;
   onClick: (campo: "apellidos" | "dni" | "localidad" | "estado" | "fecha_tx") => void;
   children: React.ReactNode;
 }) {

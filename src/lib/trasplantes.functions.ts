@@ -92,12 +92,31 @@ const trasplanteBaseSchema = z.object({
   observaciones: z.string().trim().max(2000).optional().nullable().transform((v) => (v ? v : null)),
 });
 
+
+/** Normaliza los campos opcionales a null para que coincidan con el esquema de la tabla. */
+function aFilaTrasplante(d: z.infer<typeof trasplanteBaseSchema>) {
+  return {
+    paciente_id: d.paciente_id,
+    estado_tx_id: d.estado_tx_id,
+    diagnostico_id: d.diagnostico_id ?? null,
+    tipo_tx_id: d.tipo_tx_id ?? null,
+    via_admin_id: d.via_admin_id ?? null,
+    cobertura_id: d.cobertura_id ?? null,
+    centro_tx_id: d.centro_tx_id ?? null,
+    medico_ref_id: d.medico_ref_id ?? null,
+    fecha_tx: d.fecha_tx ?? null,
+    observaciones: d.observaciones ?? null,
+  };
+}
+
 async function validarRequiereFecha(
-  supabase: { from: (t: "estados_tx") => { select: (s: string) => { eq: (c: string, v: string) => { maybeSingle: () => Promise<{ data: { requiere_fecha_tx: boolean } | null; error: unknown }> } } } },
+  supabase: { from: (t: "estados_tx") => any },
   estadoTxId: string,
   fechaTx: string | null,
 ): Promise<void> {
-  const { data: estado } = await supabase.from("estados_tx").select("requiere_fecha_tx").eq("id", estadoTxId).maybeSingle();
+  const { data: estado } = (await supabase.from("estados_tx").select("requiere_fecha_tx").eq("id", estadoTxId).maybeSingle()) as {
+    data: { requiere_fecha_tx: boolean } | null;
+  };
   if (estado?.requiere_fecha_tx && !fechaTx) {
     throw new AppError("El estado seleccionado requiere fecha de trasplante.", "VALIDACION");
   }
@@ -109,7 +128,7 @@ export const crearTrasplante = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => trasplanteBaseSchema.parse(input))
   .handler(async ({ context, data }): Promise<{ id: string }> => {
     await validarRequiereFecha(context.supabase, data.estado_tx_id, data.fecha_tx);
-    const { data: creado, error } = await context.supabase.from("trasplantes").insert(data).select("id").single();
+    const { data: creado, error } = await context.supabase.from("trasplantes").insert(aFilaTrasplante(data)).select("id").single();
     if (error) throw aAppError(error);
     return { id: creado.id };
   });
@@ -121,7 +140,7 @@ export const actualizarTrasplante = createServerFn({ method: "POST" })
   .handler(async ({ context, data }): Promise<void> => {
     const { id, ...cambios } = data;
     await validarRequiereFecha(context.supabase, cambios.estado_tx_id, cambios.fecha_tx);
-    const { error } = await context.supabase.from("trasplantes").update(cambios).eq("id", id);
+    const { error } = await context.supabase.from("trasplantes").update(aFilaTrasplante(cambios)).eq("id", id);
     if (error) throw aAppError(error);
   });
 

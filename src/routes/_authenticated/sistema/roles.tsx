@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useState } from "react";
+import React, { useState } from "react";
 import { PERMISOS, ROLES_LABEL } from "@/auth";
 import type { AppRole } from "@/auth/types";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
@@ -84,7 +84,7 @@ function RolesPage() {
               </TableRow>
             ) : (
               [...gruposPermisos.entries()].map(([grupo, permisos]) => (
-                <>
+                <React.Fragment key={`g-${grupo}`}>
                   <TableRow key={`grupo-${grupo}`} className="bg-muted/40">
                     <TableCell colSpan={(data?.roles.length ?? 0) + 1} className="text-xs font-semibold uppercase text-muted-foreground">
                       {grupo}
@@ -107,7 +107,7 @@ function RolesPage() {
                       ))}
                     </TableRow>
                   ))}
-                </>
+                </React.Fragment>
               ))
             )}
           </TableBody>

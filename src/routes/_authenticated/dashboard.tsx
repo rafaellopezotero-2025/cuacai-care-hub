@@ -63,7 +63,7 @@ const COLORES_CICLICOS = [
 const MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 
 function etiquetaMes(mes: string): string {
-  const [anio, m] = mes.split("-");
+  const [anio = "", m = ""] = mes.split("-");
   const idx = Number(m) - 1;
   return `${MESES_CORTOS[idx] ?? m} ${anio.slice(2)}`;
 }
@@ -72,8 +72,8 @@ function completarMeses(evolucion: { mes: string; valor: number }[]): PuntoEvolu
   if (evolucion.length === 0) return [];
   const ordenado = [...evolucion].sort((a, b) => a.mes.localeCompare(b.mes));
   const mapa = new Map(ordenado.map((e) => [e.mes, e.valor]));
-  const [anioMin, mesMin] = ordenado[0].mes.split("-").map(Number);
-  const [anioMax, mesMax] = ordenado[ordenado.length - 1].mes.split("-").map(Number);
+  const [anioMin = 0, mesMin = 1] = (ordenado[0]?.mes ?? "").split("-").map(Number);
+  const [anioMax = 0, mesMax = 1] = (ordenado[ordenado.length - 1]?.mes ?? "").split("-").map(Number);
   const resultado: PuntoEvolucion[] = [];
   let anio = anioMin;
   let mes = mesMin;
@@ -138,35 +138,35 @@ function DashboardPage() {
     id: t.id,
     nombre: t.nombre,
     valor: t.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porCobertura: ItemDonut[] = (datos?.por_cobertura ?? []).map((c, i) => ({
     id: c.id,
     nombre: c.nombre,
     valor: c.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porVia: ItemBarra[] = (datos?.por_via ?? []).map((v, i) => ({
     id: v.id,
     nombre: v.nombre,
     valor: v.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const porCentro: ItemBarra[] = (datos?.por_centro ?? []).map((c, i) => ({
     id: c.id,
     nombre: c.nombre,
     valor: c.valor,
-    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length],
+    color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)",
   }));
 
   const localidadesOrdenadas = [...(datos?.por_localidad ?? [])].sort((a, b) => b.valor - a.valor);
   const top10 = localidadesOrdenadas.slice(0, 10);
   const otras = localidadesOrdenadas.slice(10).reduce((acc, l) => acc + l.valor, 0);
   const porLocalidad: ItemBarra[] = [
-    ...top10.map((l, i) => ({ id: l.nombre, nombre: l.nombre, valor: l.valor, color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] })),
+    ...top10.map((l, i) => ({ id: l.nombre, nombre: l.nombre, valor: l.valor,  color: COLORES_CICLICOS[i % COLORES_CICLICOS.length] ?? "var(--muted-foreground)" })),
     ...(otras > 0 ? [{ id: "__otras__", nombre: "Otras", valor: otras, color: "var(--muted-foreground)" }] : []),
   ];
 
@@ -397,7 +397,9 @@ function DashboardPage() {
               <GraficoEvolucion
                 data={evolucion}
                 onPointClick={(item) => {
-                  const [anio, mes] = item.mes.split("-").map(Number);
+                  const partes = item.mes.split("-").map(Number);
+                  const anio = partes[0] ?? new Date().getFullYear();
+                  const mes = partes[1] ?? 1;
                   const desde = `${item.mes}-01`;
                   const ultimoDia = new Date(anio, mes, 0).getDate();
                   const hasta = `${item.mes}-${String(ultimoDia).padStart(2, "0")}`;

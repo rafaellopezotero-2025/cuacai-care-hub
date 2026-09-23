@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { ChevronDown, ChevronRight, Search } from "lucide-react";
 import { PERMISOS } from "@/auth";
@@ -118,7 +118,7 @@ function AuditoriaPage() {
               </TableRow>
             ) : (
               data.filas.map((fila: FilaAuditoria) => (
-                <>
+                <React.Fragment key={fila.id}>
                   <TableRow
                     key={fila.id}
                     className="cursor-pointer"
@@ -158,7 +158,7 @@ function AuditoriaPage() {
                       </TableCell>
                     </TableRow>
                   ) : null}
-                </>
+                </React.Fragment>
               ))
             )}
           </TableBody>
