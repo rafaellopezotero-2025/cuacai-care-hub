@@ -10,7 +10,7 @@ export interface ItemBarra {
 
 interface GraficoBarrasProps {
   data: ItemBarra[];
-  activoId?: string;
+  activoId?: string | undefined;
   onBarClick?: (item: ItemBarra) => void;
   ariaLabel?: string;
   alto?: number;

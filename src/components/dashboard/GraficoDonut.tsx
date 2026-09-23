@@ -11,7 +11,7 @@ export interface ItemDonut {
 
 interface GraficoDonutProps {
   data: ItemDonut[];
-  activoId?: string;
+  activoId?: string | undefined;
   onSliceClick?: (item: ItemDonut) => void;
   totalLabel?: string;
   ariaLabel?: string;

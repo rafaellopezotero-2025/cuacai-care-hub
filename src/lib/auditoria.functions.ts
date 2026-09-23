@@ -17,6 +17,8 @@ const filtrosSchema = z.object({
 
 export type FiltrosAuditoria = z.infer<typeof filtrosSchema>;
 
+export type JsonAuditoria = string | number | boolean | null | { [k: string]: JsonAuditoria } | JsonAuditoria[];
+
 export interface FilaAuditoria {
   id: number;
   timestamp: string;
@@ -26,9 +28,9 @@ export interface FilaAuditoria {
   entity: string;
   entity_id: string | null;
   paciente_id: string | null;
-  old_values: Record<string, unknown> | null;
-  new_values: Record<string, unknown> | null;
-  detalle: Record<string, unknown> | null;
+  old_values: JsonAuditoria;
+  new_values: JsonAuditoria;
+  detalle: JsonAuditoria;
   ip_address: string | null;
   user_agent: string | null;
 }
