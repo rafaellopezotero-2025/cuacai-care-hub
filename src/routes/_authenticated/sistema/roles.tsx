@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { useState } from "react";
+import React, { useState } from "react";
 import { PERMISOS, ROLES_LABEL } from "@/auth";
 import type { AppRole } from "@/auth/types";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
