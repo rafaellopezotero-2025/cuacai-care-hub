@@ -84,7 +84,7 @@ function RolesPage() {
               </TableRow>
             ) : (
               [...gruposPermisos.entries()].map(([grupo, permisos]) => (
-                <>
+                <React.Fragment key={`g-${grupo}`}>
                   <TableRow key={`grupo-${grupo}`} className="bg-muted/40">
                     <TableCell colSpan={(data?.roles.length ?? 0) + 1} className="text-xs font-semibold uppercase text-muted-foreground">
                       {grupo}
@@ -107,7 +107,7 @@ function RolesPage() {
                       ))}
                     </TableRow>
                   ))}
-                </>
+                </React.Fragment>
               ))
             )}
           </TableBody>

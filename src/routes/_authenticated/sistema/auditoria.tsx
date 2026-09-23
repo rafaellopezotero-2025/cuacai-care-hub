@@ -118,7 +118,7 @@ function AuditoriaPage() {
               </TableRow>
             ) : (
               data.filas.map((fila: FilaAuditoria) => (
-                <>
+                <React.Fragment key={fila.id}>
                   <TableRow
                     key={fila.id}
                     className="cursor-pointer"
@@ -158,7 +158,7 @@ function AuditoriaPage() {
                       </TableCell>
                     </TableRow>
                   ) : null}
-                </>
+                </React.Fragment>
               ))
             )}
           </TableBody>
