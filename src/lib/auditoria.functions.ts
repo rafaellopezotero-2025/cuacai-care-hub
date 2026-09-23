@@ -26,9 +26,9 @@ export interface FilaAuditoria {
   entity: string;
   entity_id: string | null;
   paciente_id: string | null;
-  old_values: unknown;
-  new_values: unknown;
-  detalle: unknown;
+  old_values: Record<string, unknown> | null;
+  new_values: Record<string, unknown> | null;
+  detalle: Record<string, unknown> | null;
   ip_address: string | null;
   user_agent: string | null;
 }

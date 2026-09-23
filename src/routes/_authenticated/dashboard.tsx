@@ -397,7 +397,9 @@ function DashboardPage() {
               <GraficoEvolucion
                 data={evolucion}
                 onPointClick={(item) => {
-                  const [anio, mes] = item.mes.split("-").map(Number);
+                  const partes = item.mes.split("-").map(Number);
+                  const anio = partes[0] ?? new Date().getFullYear();
+                  const mes = partes[1] ?? 1;
                   const desde = `${item.mes}-01`;
                   const ultimoDia = new Date(anio, mes, 0).getDate();
                   const hasta = `${item.mes}-${String(ultimoDia).padStart(2, "0")}`;
