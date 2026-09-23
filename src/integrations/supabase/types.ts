@@ -684,6 +684,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      importar_lote: {
+        Args: { p_pacientes: Json; p_trasplantes: Json }
+        Returns: Json
+      }
       localidades_pacientes: { Args: never; Returns: string[] }
       mis_permisos: { Args: never; Returns: string[] }
       registrar_evento_auditoria: {
