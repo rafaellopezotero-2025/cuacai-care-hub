@@ -63,7 +63,7 @@ const COLORES_CICLICOS = [
 const MESES_CORTOS = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
 
 function etiquetaMes(mes: string): string {
-  const [anio, m] = mes.split("-");
+  const [anio = "", m = ""] = mes.split("-");
   const idx = Number(m) - 1;
   return `${MESES_CORTOS[idx] ?? m} ${anio.slice(2)}`;
 }
@@ -72,8 +72,8 @@ function completarMeses(evolucion: { mes: string; valor: number }[]): PuntoEvolu
   if (evolucion.length === 0) return [];
   const ordenado = [...evolucion].sort((a, b) => a.mes.localeCompare(b.mes));
   const mapa = new Map(ordenado.map((e) => [e.mes, e.valor]));
-  const [anioMin, mesMin] = ordenado[0].mes.split("-").map(Number);
-  const [anioMax, mesMax] = ordenado[ordenado.length - 1].mes.split("-").map(Number);
+  const [anioMin = 0, mesMin = 1] = (ordenado[0]?.mes ?? "").split("-").map(Number);
+  const [anioMax = 0, mesMax = 1] = (ordenado[ordenado.length - 1]?.mes ?? "").split("-").map(Number);
   const resultado: PuntoEvolucion[] = [];
   let anio = anioMin;
   let mes = mesMin;
