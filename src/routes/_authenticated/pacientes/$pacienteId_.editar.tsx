@@ -10,7 +10,7 @@ import { mensajeDeError } from "@/lib/errores";
 import { actualizarPaciente, obtenerPaciente } from "@/lib/pacientes.functions";
 import type { Paciente } from "@/types/dominio";
 
-export const Route = createFileRoute("/_authenticated/pacientes/$pacienteId/editar")({
+export const Route = createFileRoute("/_authenticated/pacientes/$pacienteId_/editar")({
   head: () => ({
     meta: [
       { title: "Editar paciente · CUCAIER" },
