@@ -122,8 +122,8 @@ export const obtenerPaciente = createServerFn({ method: "GET" })
 const soloDigitos = /^[0-9]+$/;
 
 const pacienteSchema = z.object({
-  nombres: z.string().trim().min(1, "El nombre es obligatorio.").max(150),
-  apellidos: z.string().trim().min(1, "El apellido es obligatorio.").max(150),
+  nombres: z.string().trim().min(1, "El nombre es obligatorio.").max(120, "Máximo 120 caracteres."),
+  apellidos: z.string().trim().min(1, "El apellido es obligatorio.").max(120, "Máximo 120 caracteres."),
   dni: z
     .string()
     .trim()
@@ -170,7 +170,7 @@ export const crearPaciente = createServerFn({ method: "POST" })
 /** Actualiza los datos de un paciente existente. */
 export const actualizarPaciente = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => z.object({ id: uuid }).and(pacienteSchema).parse(input))
+  .inputValidator((input: unknown) => z.object({ id: uuid }).merge(pacienteSchema).parse(input))
   .handler(async ({ context, data }): Promise<{ id: string }> => {
     const { data: autorizado, error: errorPermiso } = await context.supabase.rpc("has_permission", {
       _user_id: context.userId,
