@@ -13,8 +13,8 @@
 - [x] F11 Capa AuthProvider preparada para OpenAuth + README
 ## Actualización solicitada 2026-09-24
 
-- [ ] Restaurar todos los permisos del rol administrador
-- [ ] Hacer funcional y verificable la actualización de pacientes
-- [ ] Reemplazar el pie institucional por el aviso de responsabilidad
-- [ ] Simplificar el texto inferior del acceso
+- [x] Restaurar todos los permisos del rol administrador
+- [x] Hacer funcional y verificable la actualización de pacientes
+- [x] Reemplazar el pie institucional por el aviso de responsabilidad
+- [x] Simplificar el texto inferior del acceso
 

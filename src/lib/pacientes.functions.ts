@@ -171,16 +171,27 @@ export const crearPaciente = createServerFn({ method: "POST" })
 export const actualizarPaciente = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: uuid }).and(pacienteSchema).parse(input))
-  .handler(async ({ context, data }): Promise<void> => {
+  .handler(async ({ context, data }): Promise<{ id: string }> => {
+    const { data: autorizado, error: errorPermiso } = await context.supabase.rpc("has_permission", {
+      _user_id: context.userId,
+      _permiso: "pacientes.editar",
+    });
+    if (errorPermiso) throw aAppError(errorPermiso);
+    if (!autorizado) throw new AppError("No tiene permisos para actualizar pacientes.", "NO_AUTORIZADO");
+
     const { id, ...cambios } = data;
-    const { error } = await context.supabase
+    const { data: actualizado, error } = await context.supabase
       .from("pacientes")
       .update({ ...cambios, sexo: cambios.sexo ?? null })
-      .eq("id", id);
+      .eq("id", id)
+      .select("id")
+      .maybeSingle();
     if (error) {
       if (error.code === "23505") throw new AppError("Ya existe un paciente con ese DNI.", "DUPLICADO");
       throw aAppError(error);
     }
+    if (!actualizado) throw new AppError("No se pudo actualizar el paciente.", "NO_ENCONTRADO");
+    return { id: actualizado.id };
   });
 
 /** Activa/desactiva (baja lógica) un paciente. Requiere permiso pacientes.desactivar. */
