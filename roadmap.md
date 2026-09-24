@@ -11,3 +11,10 @@
 - [x] F9 Exportación CSV/Excel auditada
 - [x] F10 Hardening
 - [x] F11 Capa AuthProvider preparada para OpenAuth + README
+## Actualización solicitada 2026-09-24
+
+- [x] Restaurar todos los permisos del rol administrador
+- [x] Hacer funcional y verificable la actualización de pacientes
+- [x] Reemplazar el pie institucional por el aviso de responsabilidad
+- [x] Simplificar el texto inferior del acceso
+

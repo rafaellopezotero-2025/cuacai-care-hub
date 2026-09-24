@@ -15,8 +15,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 const soloDigitos = /^[0-9]+$/;
 
 const pacienteFormSchema = z.object({
-  nombres: z.string().trim().min(1, "El nombre es obligatorio."),
-  apellidos: z.string().trim().min(1, "El apellido es obligatorio."),
+  nombres: z.string().trim().min(1, "El nombre es obligatorio.").max(120, "Máximo 120 caracteres."),
+  apellidos: z.string().trim().min(1, "El apellido es obligatorio.").max(120, "Máximo 120 caracteres."),
   dni: z.string().trim().refine((v) => v === "" || (soloDigitos.test(v) && v.length >= 6 && v.length <= 9), "El DNI debe tener entre 6 y 9 dígitos."),
   fecha_nacimiento: z.string().trim().refine((v) => v === "" || new Date(v) <= new Date(), "La fecha no puede ser futura."),
   sexo: z.enum(["", "F", "M", "X"]),
@@ -73,7 +73,7 @@ export function PacienteForm({ valoresIniciales, enviando, onSubmit, textoBoton 
               <FormItem>
                 <FormLabel>Nombres</FormLabel>
                 <FormControl>
-                  <Input {...field} autoComplete="off" />
+                  <Input {...field} autoComplete="off" maxLength={120} />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -86,7 +86,7 @@ export function PacienteForm({ valoresIniciales, enviando, onSubmit, textoBoton 
               <FormItem>
                 <FormLabel>Apellidos</FormLabel>
                 <FormControl>
-                  <Input {...field} autoComplete="off" />
+                  <Input {...field} autoComplete="off" maxLength={120} />
                 </FormControl>
                 <FormMessage />
               </FormItem>

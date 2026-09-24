@@ -78,7 +78,23 @@ function LoginPage() {
             Información sanitaria sensible: acceso restringido a personal autorizado.
           </p>
         </div>
-        <div className="text-xs text-sidebar-foreground/60">Ministerio de Salud · Gobierno de Entre Ríos</div>
+        <div className="max-w-2xl space-y-2 text-xs leading-relaxed text-sidebar-foreground/70">
+          <p className="font-semibold text-sidebar-foreground">Aviso de Responsabilidad e Independencia:</p>
+          <p>
+            Esta plataforma es una herramienta de desarrollo independiente y de carácter no oficial. No cuenta con la
+            vinculación, patrocinio, aval ni representación formal del Ministerio de Salud de Entre Ríos ni del Centro
+            Único Coordinador de Ablación e Implantes de Entre Ríos (CUCAIER).
+          </p>
+          <p>
+            <span className="font-semibold text-sidebar-foreground">Uso exclusivo e interno:</span> Diseñada como soporte
+            operativo para la gestión y registro técnico de información por parte de personal autorizado.
+          </p>
+          <p>
+            <span className="font-semibold text-sidebar-foreground">Propiedad Intelectual:</span> Los nombres, siglas y
+            referencias a organismos públicos se utilizan únicamente con fines contextuales e identificatorios de la
+            función interna, sin atribuirse la titularidad ni la condición de sistema gubernamental oficial.
+          </p>
+        </div>
       </aside>
 
       <main className="flex items-center justify-center p-6">
@@ -129,7 +145,7 @@ function LoginPage() {
             </form>
           </div>
           <p className="mt-6 text-center text-xs text-muted-foreground">
-            El acceso queda registrado. Uso exclusivo para personal autorizado del CUCAIER.
+            El acceso queda registrado. Uso exclusivo para personal autorizado
           </p>
         </div>
       </main>
