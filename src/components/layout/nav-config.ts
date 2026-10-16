@@ -49,6 +49,7 @@ export const NAV_GRUPOS: NavGrupo[] = [
       { titulo: "Coberturas", to: "/configuracion/coberturas", icono: ShieldCheck, permisos: [PERMISOS.maestrosVer] },
       { titulo: "Médicos de referencia", to: "/configuracion/medicos", icono: UserRound, permisos: [PERMISOS.maestrosVer] },
       { titulo: "Centros de trasplante", to: "/configuracion/centros", icono: Building2, permisos: [PERMISOS.maestrosVer] },
+      { titulo: "Centros de derivación", to: "/configuracion/centros-derivacion", icono: Building2, permisos: [PERMISOS.maestrosVer] },
     ],
   },
   {

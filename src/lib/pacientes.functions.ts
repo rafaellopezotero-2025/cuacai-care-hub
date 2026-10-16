@@ -89,11 +89,20 @@ export type TrasplanteConJoins = Trasplante & {
   medicos_ref: { nombres: string; apellidos: string } | null;
 };
 
+export interface CentroDerivacionFicha {
+  nombre: string;
+  direccion: string | null;
+  telefono: string | null;
+  email: string | null;
+  localidad: string | null;
+  provincia: string | null;
+}
+
 /** Ficha de un paciente con sus procesos de trasplante. Registra evento de auditoría VIEW. */
 export const obtenerPaciente = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => z.object({ id: uuid }).parse(input))
-  .handler(async ({ context, data }): Promise<{ paciente: Paciente; trasplantes: TrasplanteConJoins[] }> => {
+  .handler(async ({ context, data }): Promise<{ paciente: Paciente; trasplantes: TrasplanteConJoins[]; centroDerivacion: CentroDerivacionFicha | null }> => {
     const { data: paciente, error } = await context.supabase.from("pacientes").select("*").eq("id", data.id).maybeSingle();
     if (error) throw aAppError(error);
     if (!paciente) throw new AppError("Paciente no encontrado.", "NO_ENCONTRADO");
@@ -116,7 +125,17 @@ export const obtenerPaciente = createServerFn({ method: "GET" })
       ...(meta.userAgent ? { p_user_agent: meta.userAgent } : {}),
     });
 
-    return { paciente, trasplantes: (trasplantes ?? []) as unknown as TrasplanteConJoins[] };
+    let centroDerivacion: CentroDerivacionFicha | null = null;
+    if (paciente.centro_derivacion_id) {
+      const { data: cd } = await context.supabase
+        .from("centros_derivacion")
+        .select("nombre, direccion, telefono, email, localidad, provincia")
+        .eq("id", paciente.centro_derivacion_id)
+        .maybeSingle();
+      centroDerivacion = cd ?? null;
+    }
+
+    return { paciente, trasplantes: (trasplantes ?? []) as unknown as TrasplanteConJoins[], centroDerivacion };
   });
 
 const soloDigitos = /^[0-9]+$/;
@@ -148,6 +167,7 @@ const pacienteSchema = z.object({
     .transform((v) => (v ? v : null)),
   domicilio: z.string().trim().max(300).optional().transform((v) => (v ? v : null)),
   observaciones: z.string().trim().max(2000).optional().transform((v) => (v ? v : null)),
+  centro_derivacion_id: z.string().trim().optional().nullable().transform((v) => (v ? v : null)).refine((v) => v === null || z.string().uuid().safeParse(v).success, "Centro de derivación inválido."),
 });
 
 /** Crea un paciente nuevo. */

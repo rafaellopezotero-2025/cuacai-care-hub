@@ -10,7 +10,8 @@ export type TablaMaestro =
   | "vias_admin"
   | "coberturas"
   | "medicos_ref"
-  | "centros_tx";
+  | "centros_tx"
+  | "centros_derivacion";
 
 export type MaestroSlug =
   | "diagnosticos"
@@ -19,7 +20,8 @@ export type MaestroSlug =
   | "vias-administrativas"
   | "coberturas"
   | "medicos"
-  | "centros";
+  | "centros"
+  | "centros-derivacion";
 
 export type TipoCampoMaestro = "text" | "email" | "boolean" | "number";
 
@@ -107,6 +109,20 @@ export const MAESTROS_CONFIG: Record<MaestroSlug, MaestroConfig> = {
       { nombre: "telefono", etiqueta: "Teléfono", tipo: "text", requerido: false, ancho: "half" },
       { nombre: "email", etiqueta: "Email", tipo: "email", requerido: false, ancho: "half" },
       { nombre: "observaciones", etiqueta: "Observaciones", tipo: "text", requerido: false },
+    ],
+  },
+  "centros-derivacion": {
+    tabla: "centros_derivacion",
+    titulo: "Centros de derivación",
+    descripcion: "Establecimientos que derivan pacientes.",
+    campoPrincipal: "nombre",
+    campos: [
+      { nombre: "nombre", etiqueta: "Nombre", tipo: "text", requerido: true },
+      { nombre: "direccion", etiqueta: "Dirección", tipo: "text", requerido: false },
+      { nombre: "localidad", etiqueta: "Localidad", tipo: "text", requerido: false, ancho: "half" },
+      { nombre: "provincia", etiqueta: "Provincia", tipo: "text", requerido: false, ancho: "half" },
+      { nombre: "telefono", etiqueta: "Teléfono", tipo: "text", requerido: false, ancho: "half" },
+      { nombre: "email", etiqueta: "Email", tipo: "email", requerido: false, ancho: "half" },
     ],
   },
 };

@@ -9,6 +9,7 @@ export type ViaAdmin = Tables<"vias_admin">;
 export type Cobertura = Tables<"coberturas">;
 export type MedicoRef = Tables<"medicos_ref">;
 export type CentroTx = Tables<"centros_tx">;
+export type CentroDerivacion = Tables<"centros_derivacion">;
 export type AuditLog = Tables<"audit_log">;
 export type Profile = Tables<"profiles">;
 
@@ -27,6 +28,7 @@ export interface Maestros {
   coberturas: Opcion[];
   medicosRef: Opcion[];
   centrosTx: Opcion[];
+  centrosDerivacion: Opcion[];
   localidades: string[];
 }
 

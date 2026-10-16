@@ -130,6 +130,14 @@ export const listarMaestro = createServerFn({ method: "GET" })
           if (error) throw aAppError(error);
           return (filas ?? []).map((f) => f as FilaMaestro);
         }
+        case "centros_derivacion": {
+          let q = sb.from("centros_derivacion").select("*").order("nombre").limit(500);
+          if (!incluirInactivos) q = q.eq("activo", true);
+          if (busqueda) q = q.ilike("nombre", `%${busqueda}%`);
+          const { data: filas, error } = await q;
+          if (error) throw aAppError(error);
+          return (filas ?? []).map((f) => f as FilaMaestro);
+        }
       }
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -239,6 +247,21 @@ export const guardarMaestro = createServerFn({ method: "POST" })
           if (error) throw aAppError(error);
           return fila as FilaMaestro;
         }
+        case "centros_derivacion": {
+          const payload = {
+            nombre: v["nombre"] as string,
+            direccion: (v["direccion"] as string | null) ?? null,
+            localidad: (v["localidad"] as string | null) ?? null,
+            provincia: (v["provincia"] as string | null) ?? null,
+            telefono: (v["telefono"] as string | null) ?? null,
+            email: (v["email"] as string | null) ?? null,
+          };
+          const { data: fila, error } = data.id
+            ? await sb.from("centros_derivacion").update(payload).eq("id", data.id).select().single()
+            : await sb.from("centros_derivacion").insert(payload).select().single();
+          if (error) throw aAppError(error);
+          return fila as FilaMaestro;
+        }
       }
     } catch (error) {
       if (error instanceof AppError) throw error;
@@ -287,6 +310,9 @@ export const cambiarActivoMaestro = createServerFn({ method: "POST" })
         break;
       case "centros_tx":
         ({ error } = await sb.from("centros_tx").update({ activo: data.activo }).eq("id", data.id));
+        break;
+      case "centros_derivacion":
+        ({ error } = await sb.from("centros_derivacion").update({ activo: data.activo }).eq("id", data.id));
         break;
     }
     if (error) throw aAppError(error);

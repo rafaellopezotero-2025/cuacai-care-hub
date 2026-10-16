@@ -42,6 +42,7 @@ function NuevoPacientePage() {
           email: valores.email,
           domicilio: valores.domicilio,
           observaciones: valores.observaciones,
+          centro_derivacion_id: valores.centro_derivacion_id,
         },
       }),
     onSuccess: async ({ id }) => {

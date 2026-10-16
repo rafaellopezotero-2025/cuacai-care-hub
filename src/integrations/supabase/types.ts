@@ -62,6 +62,45 @@ export type Database = {
         }
         Relationships: []
       }
+      centros_derivacion: {
+        Row: {
+          activo: boolean
+          created_at: string
+          direccion: string | null
+          email: string | null
+          id: string
+          localidad: string | null
+          nombre: string
+          provincia: string | null
+          telefono: string | null
+          updated_at: string
+        }
+        Insert: {
+          activo?: boolean
+          created_at?: string
+          direccion?: string | null
+          email?: string | null
+          id?: string
+          localidad?: string | null
+          nombre: string
+          provincia?: string | null
+          telefono?: string | null
+          updated_at?: string
+        }
+        Update: {
+          activo?: boolean
+          created_at?: string
+          direccion?: string | null
+          email?: string | null
+          id?: string
+          localidad?: string | null
+          nombre?: string
+          provincia?: string | null
+          telefono?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       centros_tx: {
         Row: {
           activo: boolean
@@ -246,6 +285,7 @@ export type Database = {
         Row: {
           activo: boolean
           apellidos: string
+          centro_derivacion_id: string | null
           created_at: string
           created_by: string | null
           dni: string | null
@@ -265,6 +305,7 @@ export type Database = {
         Insert: {
           activo?: boolean
           apellidos: string
+          centro_derivacion_id?: string | null
           created_at?: string
           created_by?: string | null
           dni?: string | null
@@ -284,6 +325,7 @@ export type Database = {
         Update: {
           activo?: boolean
           apellidos?: string
+          centro_derivacion_id?: string | null
           created_at?: string
           created_by?: string | null
           dni?: string | null
@@ -300,7 +342,15 @@ export type Database = {
           updated_at?: string
           updated_by?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "pacientes_centro_derivacion_id_fkey"
+            columns: ["centro_derivacion_id"]
+            isOneToOne: false
+            referencedRelation: "centros_derivacion"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       permisos: {
         Row: {

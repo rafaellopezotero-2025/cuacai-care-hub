@@ -84,9 +84,13 @@ function FichaPacientePage() {
     );
   }
 
-  const { paciente, trasplantes } = pacienteQuery.data;
+  const { paciente, trasplantes, centroDerivacion } = pacienteQuery.data;
   const edad = calcularEdad(paciente.fecha_nacimiento);
   const procesoActual = trasplantes[0];
+  const medico = procesoActual?.medicos_ref ? `${procesoActual.medicos_ref.apellidos}, ${procesoActual.medicos_ref.nombres}` : "—";
+  const contactoCentro = centroDerivacion
+    ? [centroDerivacion.telefono, centroDerivacion.email].filter(Boolean).join(" · ") || "—"
+    : "—";
 
   return (
     <RequierePermiso permiso={PERMISOS.pacientesVer}>
@@ -166,8 +170,16 @@ function FichaPacientePage() {
         </div>
 
         <div className="card-surface p-5 lg:col-span-2">
-          <h2 className="mb-3 text-sm font-semibold text-foreground">Estado actual</h2>
-          <EstadoBadge codigo={procesoActual?.estados_tx?.codigo} nombre={procesoActual?.estados_tx?.estado_tx} />
+          <h2 className="mb-3 text-sm font-semibold text-foreground">Referencia y derivación</h2>
+          <dl className="grid gap-2 text-sm sm:grid-cols-2">
+            <CampoFicha etiqueta="Médico de referencia" valor={medico} />
+            <CampoFicha etiqueta="Centro de derivación" valor={centroDerivacion?.nombre ?? "—"} />
+            <CampoFicha
+              etiqueta="Dirección del centro"
+              valor={centroDerivacion ? [centroDerivacion.direccion, centroDerivacion.localidad, centroDerivacion.provincia].filter(Boolean).join(", ") || "—" : "—"}
+            />
+            <CampoFicha etiqueta="Contacto del centro" valor={contactoCentro} />
+          </dl>
 
           <h3 className="mb-2 mt-6 text-sm font-semibold text-foreground">Procesos de trasplante</h3>
           {trasplantes.length === 0 ? (
