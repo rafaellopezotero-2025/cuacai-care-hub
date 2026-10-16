@@ -12,6 +12,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
+const SIN_CENTRO = "__sin_centro__";
 const soloDigitos = /^[0-9]+$/;
 
 const pacienteFormSchema = z.object({
@@ -26,6 +27,7 @@ const pacienteFormSchema = z.object({
   email: z.string().trim().refine((v) => v === "" || z.string().email().safeParse(v).success, "El email no es válido."),
   domicilio: z.string().trim(),
   observaciones: z.string().trim(),
+  centro_derivacion_id: z.string(),
 });
 
 export type PacienteFormValues = z.infer<typeof pacienteFormSchema>;
@@ -42,6 +44,7 @@ export const PACIENTE_FORM_DEFAULTS: PacienteFormValues = {
   email: "",
   domicilio: "",
   observaciones: "",
+  centro_derivacion_id: "",
 };
 
 interface PacienteFormProps {
@@ -206,6 +209,31 @@ export function PacienteForm({ valoresIniciales, enviando, onSubmit, textoBoton 
                 <FormControl>
                   <Input {...field} autoComplete="off" />
                 </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="centro_derivacion_id"
+            render={({ field }) => (
+              <FormItem className="sm:col-span-2">
+                <FormLabel>Centro de derivación</FormLabel>
+                <Select value={field.value || SIN_CENTRO} onValueChange={(v) => field.onChange(v === SIN_CENTRO ? "" : v)}>
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Seleccionar" />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    <SelectItem value={SIN_CENTRO}>Sin centro de derivación</SelectItem>
+                    {(maestros?.centrosDerivacion ?? []).map((c) => (
+                      <SelectItem key={c.id} value={c.id}>
+                        {c.nombre}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
                 <FormMessage />
               </FormItem>
             )}

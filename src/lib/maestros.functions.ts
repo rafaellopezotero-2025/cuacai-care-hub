@@ -8,7 +8,7 @@ export const listarMaestros = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<Maestros> => {
     const sb = context.supabase;
-    const [diag, tipos, estados, vias, cob, med, cen, loc] = await Promise.all([
+    const [diag, tipos, estados, vias, cob, med, cen, loc, der] = await Promise.all([
       sb.from("diagnosticos").select("id, diagnostico").eq("activo", true).order("diagnostico"),
       sb.from("tipos_tx").select("id, tipo_tx").eq("activo", true).order("tipo_tx"),
       sb.from("estados_tx").select("id, estado_tx, codigo, requiere_fecha_tx").eq("activo", true).order("orden"),
@@ -17,6 +17,7 @@ export const listarMaestros = createServerFn({ method: "GET" })
       sb.from("medicos_ref").select("id, nombres, apellidos").eq("activo", true).order("apellidos"),
       sb.from("centros_tx").select("id, nombre").eq("activo", true).order("nombre"),
       sb.rpc("localidades_pacientes"),
+      sb.from("centros_derivacion").select("id, nombre").eq("activo", true).order("nombre"),
     ]);
     return {
       diagnosticos: (diag.data ?? []).map((d) => ({ id: d.id, nombre: d.diagnostico })),
@@ -26,6 +27,7 @@ export const listarMaestros = createServerFn({ method: "GET" })
       coberturas: (cob.data ?? []).map((d) => ({ id: d.id, nombre: d.descripcion })),
       medicosRef: (med.data ?? []).map((d) => ({ id: d.id, nombre: `${d.apellidos}, ${d.nombres}` })),
       centrosTx: (cen.data ?? []).map((d) => ({ id: d.id, nombre: d.nombre })),
+      centrosDerivacion: (der.data ?? []).map((d) => ({ id: d.id, nombre: d.nombre })),
       localidades: (loc.data ?? []) as string[],
     };
   });

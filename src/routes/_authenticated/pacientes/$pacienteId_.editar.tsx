@@ -38,6 +38,7 @@ function pacienteAValoresFormulario(paciente: Paciente): PacienteFormValues {
     email: paciente.email ?? "",
     domicilio: paciente.domicilio ?? "",
     observaciones: paciente.observaciones ?? "",
+    centro_derivacion_id: paciente.centro_derivacion_id ?? "",
   };
 }
 
@@ -67,6 +68,7 @@ function EditarPacientePage() {
           email: valores.email,
           domicilio: valores.domicilio,
           observaciones: valores.observaciones,
+          centro_derivacion_id: valores.centro_derivacion_id,
         },
       }),
     onSuccess: async () => {
