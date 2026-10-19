@@ -171,14 +171,14 @@ function FichaPacientePage() {
 
         <div className="card-surface p-5 lg:col-span-2">
           <h2 className="mb-3 text-sm font-semibold text-foreground">Referencia y derivación</h2>
-          <dl className="grid gap-2 text-sm sm:grid-cols-2">
-            <CampoFicha etiqueta="Médico de referencia" valor={medico} />
-            <CampoFicha etiqueta="Centro de derivación" valor={centroDerivacion?.nombre ?? "—"} />
-            <CampoFicha
+          <dl className="space-y-2 text-sm">
+            <CampoLinea etiqueta="Médico de referencia" valor={medico} />
+            <CampoLinea etiqueta="Centro de derivación" valor={centroDerivacion?.nombre ?? "—"} />
+            <CampoLinea
               etiqueta="Dirección del centro"
               valor={centroDerivacion ? [centroDerivacion.direccion, centroDerivacion.localidad, centroDerivacion.provincia].filter(Boolean).join(", ") || "—" : "—"}
             />
-            <CampoFicha etiqueta="Contacto del centro" valor={contactoCentro} />
+            <CampoLinea etiqueta="Contacto del centro" valor={contactoCentro} />
           </dl>
 
           <h3 className="mb-2 mt-6 text-sm font-semibold text-foreground">Procesos de trasplante</h3>
@@ -238,6 +238,15 @@ function FichaPacientePage() {
         )}
       </div>
     </RequierePermiso>
+  );
+}
+
+function CampoLinea({ etiqueta, valor }: { etiqueta: string; valor: string }) {
+  return (
+    <div className="flex flex-wrap gap-x-1.5">
+      <dt className="text-muted-foreground">{etiqueta}:</dt>
+      <dd className="text-foreground">{valor}</dd>
+    </div>
   );
 }
 
