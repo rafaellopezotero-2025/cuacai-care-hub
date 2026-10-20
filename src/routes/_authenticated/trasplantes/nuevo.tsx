@@ -52,6 +52,7 @@ function NuevoTrasplantePage() {
           cobertura_id: valores.cobertura_id === "__ninguno__" || valores.cobertura_id === "" ? null : valores.cobertura_id,
           centro_tx_id: valores.centro_tx_id === "__ninguno__" || valores.centro_tx_id === "" ? null : valores.centro_tx_id,
           medico_ref_id: valores.medico_ref_id === "__ninguno__" || valores.medico_ref_id === "" ? null : valores.medico_ref_id,
+          centro_derivacion_id: !valores.centro_derivacion_id || valores.centro_derivacion_id === "__ninguno__" ? null : valores.centro_derivacion_id,
           fecha_tx: valores.fecha_tx || null,
           observaciones: valores.observaciones || null,
         },
@@ -74,7 +75,9 @@ function NuevoTrasplantePage() {
       />
       <div className="card-surface max-w-3xl rounded-md p-6">
         <TrasplanteForm
-          {...(pacienteId ? { valoresIniciales: { ...TRASPLANTE_FORM_DEFAULTS, paciente_id: pacienteId } } : {})}
+          key={paciente?.id ?? "nuevo"}
+          mostrarCentroDerivacion
+          {...(pacienteId ? { valoresIniciales: { ...TRASPLANTE_FORM_DEFAULTS, paciente_id: pacienteId, centro_derivacion_id: paciente?.centro_derivacion_id ?? "__ninguno__" } } : {})}
           {...(paciente ? { pacientePreseleccionado: { id: paciente.id, nombres: paciente.nombres, apellidos: paciente.apellidos, dni: paciente.dni } } : {})}
           pacienteBloqueado={!!pacienteId}
           enviando={crearMutacion.isPending}

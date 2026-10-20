@@ -125,9 +125,13 @@ async function validarRequiereFecha(
 /** Registra un nuevo proceso de trasplante para un paciente. */
 export const crearTrasplante = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .inputValidator((input: unknown) => trasplanteBaseSchema.parse(input))
+  .inputValidator((input: unknown) => trasplanteBaseSchema.extend({ centro_derivacion_id: uuid.optional().nullable() }).parse(input))
   .handler(async ({ context, data }): Promise<{ id: string }> => {
     await validarRequiereFecha(context.supabase, data.estado_tx_id, data.fecha_tx);
+    if (data.centro_derivacion_id) {
+      const { error: errPac } = await context.supabase.from("pacientes").update({ centro_derivacion_id: data.centro_derivacion_id }).eq("id", data.paciente_id);
+      if (errPac) throw aAppError(errPac);
+    }
     const { data: creado, error } = await context.supabase.from("trasplantes").insert(aFilaTrasplante(data)).select("id").single();
     if (error) throw aAppError(error);
     return { id: creado.id };

@@ -28,6 +28,7 @@ const trasplanteFormSchema = z.object({
   cobertura_id: z.string(),
   centro_tx_id: z.string(),
   medico_ref_id: z.string(),
+  centro_derivacion_id: z.string().optional(),
   fecha_tx: z.string().trim().refine((v) => v === "" || new Date(v) <= new Date(), "La fecha no puede ser futura."),
   observaciones: z.string().trim(),
 });
@@ -43,6 +44,7 @@ export const TRASPLANTE_FORM_DEFAULTS: TrasplanteFormValues = {
   cobertura_id: SIN_VALOR,
   centro_tx_id: SIN_VALOR,
   medico_ref_id: SIN_VALOR,
+  centro_derivacion_id: SIN_VALOR,
   fecha_tx: "",
   observaciones: "",
 };
@@ -61,10 +63,11 @@ interface TrasplanteFormProps {
   enviando: boolean;
   onSubmit: (valores: TrasplanteFormValues) => void;
   textoBoton: string;
+  mostrarCentroDerivacion?: boolean;
 }
 
 /** Formulario compartido de alta/edición de un proceso de trasplante. */
-export function TrasplanteForm({ valoresIniciales, pacientePreseleccionado, pacienteBloqueado, enviando, onSubmit, textoBoton }: TrasplanteFormProps) {
+export function TrasplanteForm({ valoresIniciales, pacientePreseleccionado, pacienteBloqueado, enviando, onSubmit, textoBoton, mostrarCentroDerivacion }: TrasplanteFormProps) {
   const { data: maestros } = useQuery(maestrosQueryOptions);
   const [pacienteSeleccionado, setPacienteSeleccionado] = useState<PacientePreseleccionado | undefined>(pacientePreseleccionado);
   const [busquedaPaciente, setBusquedaPaciente] = useState("");
@@ -195,6 +198,9 @@ export function TrasplanteForm({ valoresIniciales, pacientePreseleccionado, paci
           <SelectMaestro control={form.control} name="cobertura_id" label="Cobertura" opciones={maestros?.coberturas ?? []} />
           <SelectMaestro control={form.control} name="centro_tx_id" label="Centro" opciones={maestros?.centrosTx ?? []} />
           <SelectMaestro control={form.control} name="medico_ref_id" label="Médico referente" opciones={maestros?.medicosRef ?? []} />
+          {mostrarCentroDerivacion ? (
+            <SelectMaestro control={form.control} name="centro_derivacion_id" label="Centro de derivación del paciente" opciones={maestros?.centrosDerivacion ?? []} />
+          ) : null}
         </div>
 
         <FormField
@@ -235,7 +241,7 @@ function SelectMaestro({ control, name, label, opciones }: SelectMaestroProps) {
       render={({ field }) => (
         <FormItem>
           <FormLabel>{label}</FormLabel>
-          <Select value={field.value} onValueChange={field.onChange}>
+          <Select value={field.value ?? SIN_VALOR} onValueChange={field.onChange}>
             <FormControl>
               <SelectTrigger>
                 <SelectValue placeholder="Sin especificar" />
