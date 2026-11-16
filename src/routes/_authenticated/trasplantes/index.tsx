@@ -134,9 +134,11 @@ function TrasplantesListadoPage() {
             onChange={(e) => actualizarFiltros({ hasta: e.target.value || undefined })}
           />
         </div>
-        <Button variant="outline" onClick={() => navigate({ search: {} })}>
-          Limpiar filtros
-        </Button>
+        <div className="flex sm:col-span-2 sm:justify-end lg:col-span-2">
+          <Button variant="outline" className="w-full sm:w-auto" onClick={() => navigate({ search: {} })}>
+            Limpiar filtros
+          </Button>
+        </div>
       </div>
 
       <div className="card-surface overflow-x-auto rounded-md">

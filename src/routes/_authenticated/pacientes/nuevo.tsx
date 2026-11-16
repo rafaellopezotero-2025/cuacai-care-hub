@@ -5,6 +5,10 @@ import { ChevronLeft } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
 import { PacienteForm, type PacienteFormValues } from "@/components/pacientes/PacienteForm";
+import { useState } from "react";
+import { Upload, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { ACCEPT_DOCUMENTOS, subirDocumentosPaciente } from "@/lib/documentos";
 import { PERMISOS } from "@/auth";
 import { mensajeDeError } from "@/lib/errores";
 import { crearPaciente } from "@/lib/pacientes.functions";
@@ -26,6 +30,7 @@ export const Route = createFileRoute("/_authenticated/pacientes/nuevo")({
 
 function NuevoPacientePage() {
   const navigate = useNavigate();
+  const [archivos, setArchivos] = useState<File[]>([]);
 
   const mutacion = useMutation({
     mutationFn: (valores: PacienteFormValues) =>
@@ -47,6 +52,13 @@ function NuevoPacientePage() {
       }),
     onSuccess: async ({ id }) => {
       toast.success("Paciente creado correctamente.");
+      if (archivos.length) {
+        try {
+          await subirDocumentosPaciente(id, archivos);
+        } catch (e) {
+          toast.error(e instanceof Error ? e.message : "Error al subir la documentación.");
+        }
+      }
       await navigate({ to: "/pacientes/$pacienteId", params: { pacienteId: id } });
     },
     onError: (err) => toast.error(mensajeDeError(err)),
@@ -69,6 +81,38 @@ function NuevoPacientePage() {
           onSubmit={(valores) => mutacion.mutate(valores)}
           textoBoton="Crear paciente"
         />
+      </div>
+      <div className="card-surface mt-4 max-w-3xl space-y-3 p-6">
+        <h2 className="text-sm font-semibold text-foreground">Documentación</h2>
+        <p className="text-xs text-muted-foreground">Imágenes o PDF, hasta 20 MB por archivo. Se guardan al crear el paciente.</p>
+        <Button asChild variant="outline" size="sm">
+          <label className="cursor-pointer">
+            <Upload /> Agregar documentación
+            <input
+              type="file"
+              multiple
+              accept={ACCEPT_DOCUMENTOS}
+              className="hidden"
+              onChange={(e) => {
+                const f = Array.from(e.target.files ?? []);
+                setArchivos((prev) => [...prev, ...f]);
+                e.target.value = "";
+              }}
+            />
+          </label>
+        </Button>
+        {archivos.length ? (
+          <ul className="space-y-1 text-sm">
+            {archivos.map((f, i) => (
+              <li key={`${f.name}-${i}`} className="flex items-center gap-2">
+                <span className="truncate">{f.name}</span>
+                <Button type="button" variant="ghost" size="icon" title="Quitar" onClick={() => setArchivos((p) => p.filter((_, j) => j !== i))}>
+                  <X className="size-4" />
+                </Button>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </RequierePermiso>
   );

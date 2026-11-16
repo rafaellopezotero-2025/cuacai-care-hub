@@ -5,6 +5,7 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
 import { PacienteForm, type PacienteFormValues } from "@/components/pacientes/PacienteForm";
+import { DocumentosPaciente } from "@/components/pacientes/DocumentosPaciente";
 import { PERMISOS } from "@/auth";
 import { mensajeDeError } from "@/lib/errores";
 import { actualizarPaciente, obtenerPaciente } from "@/lib/pacientes.functions";
@@ -109,6 +110,10 @@ function EditarPacientePage() {
         ) : (
           <p className="text-sm text-muted-foreground">No se pudo cargar el paciente.</p>
         )}
+      </div>
+      <div className="card-surface mt-4 max-w-3xl p-6">
+        <h2 className="mb-3 text-sm font-semibold text-foreground">Documentación</h2>
+        <DocumentosPaciente pacienteId={pacienteId} editable />
       </div>
     </RequierePermiso>
   );
