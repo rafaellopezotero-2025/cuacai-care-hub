@@ -111,6 +111,10 @@ function EditarPacientePage() {
           <p className="text-sm text-muted-foreground">No se pudo cargar el paciente.</p>
         )}
       </div>
+      <div className="card-surface mt-4 max-w-3xl p-6">
+        <h2 className="mb-3 text-sm font-semibold text-foreground">Documentación</h2>
+        <DocumentosPaciente pacienteId={pacienteId} editable />
+      </div>
     </RequierePermiso>
   );
 }
