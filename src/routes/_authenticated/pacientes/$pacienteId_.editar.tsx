@@ -5,6 +5,7 @@ import { ChevronLeft, Loader2 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
 import { PacienteForm, type PacienteFormValues } from "@/components/pacientes/PacienteForm";
+import { DocumentosPaciente } from "@/components/pacientes/DocumentosPaciente";
 import { PERMISOS } from "@/auth";
 import { mensajeDeError } from "@/lib/errores";
 import { actualizarPaciente, obtenerPaciente } from "@/lib/pacientes.functions";

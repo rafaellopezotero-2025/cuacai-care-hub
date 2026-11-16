@@ -20,10 +20,12 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { useAuth, PERMISOS } from "@/auth";
+import { SeguimientoPaciente } from "@/components/pacientes/SeguimientoPaciente";
+import { DocumentosPaciente } from "@/components/pacientes/DocumentosPaciente";
 import { PANTALLA_VACIA_CLASS } from "@/lib/utils";
 import { mensajeDeError } from "@/lib/errores";
-import { cambiarActivoPaciente, historialPaciente, obtenerPaciente } from "@/lib/pacientes.functions";
-import { calcularEdad, formatearFecha, formatearFechaHora, nombreCompleto } from "@/types/dominio";
+import { cambiarActivoPaciente, obtenerPaciente } from "@/lib/pacientes.functions";
+import { calcularEdad, formatearFecha, nombreCompleto } from "@/types/dominio";
 
 const SEXO_LABEL: Record<string, string> = { F: "Femenino", M: "Masculino", X: "Otro / no informado" };
 
@@ -52,10 +54,6 @@ function FichaPacientePage() {
     queryFn: () => obtenerPaciente({ data: { id: pacienteId } }),
   });
 
-  const historialQuery = useQuery({
-    queryKey: ["pacientes", "historial", pacienteId],
-    queryFn: () => historialPaciente({ data: { id: pacienteId } }),
-  });
 
   const cambiarActivoMutacion = useMutation({
     mutationFn: (activo: boolean) => cambiarActivoPaciente({ data: { id: pacienteId, activo } }),
@@ -96,7 +94,7 @@ function FichaPacientePage() {
     <RequierePermiso permiso={PERMISOS.pacientesVer}>
       <PageHeader
         titulo={nombreCompleto(paciente)}
-        descripcion="Ficha del paciente, procesos de trasplante e historial de auditoría."
+        descripcion="Ficha del paciente, procesos de trasplante y seguimiento."
         migas={
           <Link to="/pacientes" className="inline-flex items-center gap-1 hover:text-foreground">
             <ChevronLeft className="size-3" /> Volver al listado
@@ -216,26 +214,12 @@ function FichaPacientePage() {
       </div>
 
       <div className="card-surface mt-4 p-5">
-        <h2 className="mb-3 text-sm font-semibold text-foreground">Historial de auditoría</h2>
-        {historialQuery.isLoading ? (
-          <div className="flex items-center gap-2 text-sm text-muted-foreground">
-            <Loader2 className="size-4 animate-spin" /> Cargando historial…
-          </div>
-        ) : (historialQuery.data?.length ?? 0) === 0 ? (
-          <p className={PANTALLA_VACIA_CLASS}>Sin eventos registrados.</p>
-        ) : (
-          <ul className="space-y-2 text-sm">
-            {historialQuery.data?.map((evento) => (
-              <li key={evento.id} className="flex flex-col gap-0.5 border-b border-border pb-2 last:border-0">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium text-foreground">{evento.descripcion}</span>
-                  <span className="text-xs text-muted-foreground">{formatearFechaHora(evento.timestamp)}</span>
-                </div>
-                <span className="text-xs text-muted-foreground">{evento.usuario ?? "Sistema"}</span>
-              </li>
-            ))}
-          </ul>
-        )}
+        <h2 className="mb-3 text-sm font-semibold text-foreground">Seguimiento del paciente</h2>
+        <SeguimientoPaciente pacienteId={pacienteId} editable={hasPermission(PERMISOS.pacientesEditar)} />
+      </div>
+      <div className="card-surface mt-4 p-5">
+        <h2 className="mb-3 text-sm font-semibold text-foreground">Documentación</h2>
+        <DocumentosPaciente pacienteId={pacienteId} editable={false} />
       </div>
     </RequierePermiso>
   );
