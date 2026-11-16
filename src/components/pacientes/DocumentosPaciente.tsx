@@ -50,7 +50,10 @@ export function DocumentosPaciente({ pacienteId, editable }: { pacienteId: strin
     setAbriendo(ruta);
     const { data, error } = await supabase.storage.from(BUCKET_DOCUMENTOS).createSignedUrl(ruta, 300);
     setAbriendo(null);
-    if (error || !data) return toast.error("No se pudo abrir el documento.");
+    if (error || !data) {
+      toast.error("No se pudo abrir el documento.");
+      return;
+    }
     window.open(data.signedUrl, "_blank", "noopener");
   }
 

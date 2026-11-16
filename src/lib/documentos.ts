@@ -12,7 +12,7 @@ export async function subirDocumentosPaciente(pacienteId: string, archivos: File
     const limpio = archivo.name.replace(/[^\w.\-]+/g, "_");
     const ruta = `${pacienteId}/${crypto.randomUUID()}-${limpio}`;
     const { error: e1 } = await supabase.storage.from(BUCKET_DOCUMENTOS).upload(ruta, archivo, {
-      contentType: archivo.type || undefined,
+      contentType: archivo.type || "application/octet-stream",
     });
     if (e1) throw new Error(`No se pudo subir "${archivo.name}".`);
     const { error: e2 } = await supabase.from("paciente_documentos").insert({
