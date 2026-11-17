@@ -8,6 +8,7 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { RequierePermiso } from "@/components/shared/RequierePermiso";
 import { EstadoBadge } from "@/components/shared/EstadoBadge";
 import { Paginacion } from "@/components/shared/Paginacion";
+import { CampoFiltro } from "@/components/shared/CampoFiltro";
 import { FiltroSelect } from "@/components/shared/FiltroSelect";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,6 +26,9 @@ import { calcularEdad, formatearFecha, nombreCompleto } from "@/types/dominio";
 
 const TAMANO_PAGINA = 20;
 
+const REGISTROS = ["activos", "inactivos", "todos"] as const;
+type RegistroFiltro = (typeof REGISTROS)[number];
+
 const busquedaSearchSchema = z.object({
   q: z.string().trim().max(200).optional().catch(undefined),
   estado: z.string().uuid().optional().catch(undefined),
@@ -37,7 +41,7 @@ const busquedaSearchSchema = z.object({
   pagina: z.number().int().min(1).optional().catch(undefined),
   orden: z.enum(["apellidos", "dni", "localidad", "estado", "fecha_tx"]).optional().catch(undefined),
   dir: z.enum(["asc", "desc"]).optional().catch(undefined),
-  activo: z.boolean().optional().catch(undefined),
+  registro: z.enum(REGISTROS).default("activos").catch("activos"),
 });
 
 type BusquedaSearch = z.infer<typeof busquedaSearchSchema>;
@@ -71,7 +75,8 @@ function construirFiltrosRpc(search: BusquedaSearch) {
     orden: search.orden,
     dir: search.dir,
     pagina: search.pagina ?? 1,
-    incluirInactivos: search.activo === undefined || search.activo === false,
+    incluirInactivos: search.registro === "todos",
+    soloInactivos: search.registro === "inactivos",
   };
 }
 
@@ -102,7 +107,8 @@ function PacientesPage() {
           localidad: search.localidad,
           desde: search.desde,
           hasta: search.hasta,
-          incluirInactivos: search.activo === undefined || search.activo === false,
+          incluirInactivos: search.registro === "todos",
+          soloInactivos: search.registro === "inactivos",
           formato,
         },
       }),
@@ -147,7 +153,7 @@ function PacientesPage() {
     !!search.localidad ||
     !!search.desde ||
     !!search.hasta ||
-    search.activo !== undefined;
+    search.registro !== "activos";
 
   const maestros = maestrosQuery.data;
   const datos = pacientesQuery.data;
