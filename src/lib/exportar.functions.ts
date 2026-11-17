@@ -19,6 +19,7 @@ const filtrosExportSchema = z.object({
   desde: z.string().optional(),
   hasta: z.string().optional(),
   incluirInactivos: z.boolean().optional(),
+  soloInactivos: z.boolean().optional(),
   formato: z.enum(["csv", "xlsx"]),
 });
 
@@ -70,6 +71,7 @@ export const exportarPacientes = createServerFn({ method: "POST" })
         ...(filtros.desde ? { p_desde: filtros.desde } : {}),
         ...(filtros.hasta ? { p_hasta: filtros.hasta } : {}),
         p_incluir_inactivos: filtros.incluirInactivos ?? false,
+        p_solo_inactivos: filtros.soloInactivos ?? false,
         p_orden: "apellidos",
         p_dir: "asc",
         p_limit: LIMITE_PAGINA,

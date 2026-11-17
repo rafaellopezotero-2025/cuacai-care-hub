@@ -775,6 +775,7 @@ export type Database = {
           p_medico_id?: string
           p_offset?: number
           p_orden?: string
+          p_solo_inactivos?: boolean
           p_tipo_tx_id?: string
           p_via_id?: string
         }
