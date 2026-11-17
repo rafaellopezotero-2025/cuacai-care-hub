@@ -41,7 +41,7 @@ const busquedaSearchSchema = z.object({
   pagina: z.number().int().min(1).optional().catch(undefined),
   orden: z.enum(["apellidos", "dni", "localidad", "estado", "fecha_tx"]).optional().catch(undefined),
   dir: z.enum(["asc", "desc"]).optional().catch(undefined),
-  registro: z.enum(REGISTROS).default("activos").catch("activos"),
+  registro: z.enum(REGISTROS).optional().catch(undefined),
 });
 
 type BusquedaSearch = z.infer<typeof busquedaSearchSchema>;
@@ -153,7 +153,7 @@ function PacientesPage() {
     !!search.localidad ||
     !!search.desde ||
     !!search.hasta ||
-    search.registro !== "activos";
+    search.registro !== undefined && search.registro !== "activos";
 
   const maestros = maestrosQuery.data;
   const datos = pacientesQuery.data;
@@ -258,7 +258,7 @@ function PacientesPage() {
 
           <CampoFiltro etiqueta="Registro" htmlFor="f-registro">
             <Select
-              value={search.registro}
+              value={search.registro ?? "activos"}
               onValueChange={(v) => actualizarBusqueda({ registro: v as RegistroFiltro })}
             >
               <SelectTrigger id="f-registro">
