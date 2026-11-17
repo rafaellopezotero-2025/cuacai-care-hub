@@ -198,46 +198,55 @@ function PacientesPage() {
       />
 
       <div className="card-surface mb-4 space-y-3 p-4">
-        <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
-          <Input
-            value={textoQ}
-            onChange={(e) => onCambiarTexto(e.target.value)}
-            placeholder="Buscar por apellido, nombre o DNI…"
-            className="pl-8"
-          />
-        </div>
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+          <CampoFiltro etiqueta="Búsqueda" htmlFor="f-q" className="col-span-2 sm:col-span-3 lg:col-span-6">
+            <div className="relative">
+              <Search className="pointer-events-none absolute left-2.5 top-2.5 size-4 text-muted-foreground" />
+              <Input
+                id="f-q"
+                value={textoQ}
+                onChange={(e) => onCambiarTexto(e.target.value)}
+                placeholder="Buscar por apellido, nombre o DNI…"
+                className="pl-8"
+              />
+            </div>
+          </CampoFiltro>
 
-        <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-6">
           <FiltroSelect
-            placeholder="Estado"
+            etiqueta="Estado"
+            placeholder="Todos"
             opciones={(maestros?.estadosTx ?? []).map((e) => ({ id: e.id, nombre: e.nombre }))}
             value={search.estado}
             onChange={(v) => actualizarBusqueda({ estado: v })}
           />
           <FiltroSelect
-            placeholder="Tipo"
+            etiqueta="Tipo de trasplante"
+            placeholder="Todos"
             opciones={maestros?.tiposTx ?? []}
             value={search.tipo}
             onChange={(v) => actualizarBusqueda({ tipo: v })}
           />
           <FiltroSelect
-            placeholder="Cobertura"
+            etiqueta="Cobertura"
+            placeholder="Todas"
             opciones={maestros?.coberturas ?? []}
             value={search.cobertura}
             onChange={(v) => actualizarBusqueda({ cobertura: v })}
           />
           <FiltroSelect
-            placeholder="Centro"
+            etiqueta="Centro"
+            placeholder="Todos"
             opciones={maestros?.centrosTx ?? []}
             value={search.centro}
             onChange={(v) => actualizarBusqueda({ centro: v })}
           />
-          <div>
+
+          <CampoFiltro etiqueta="Localidad" htmlFor="f-localidad">
             <Input
+              id="f-localidad"
               value={search.localidad ?? ""}
               onChange={(e) => actualizarBusqueda({ localidad: e.target.value || undefined })}
-              placeholder="Localidad"
+              placeholder="Todas"
               list="localidades-filtro"
             />
             <datalist id="localidades-filtro">
@@ -245,45 +254,49 @@ function PacientesPage() {
                 <option key={loc} value={loc} />
               ))}
             </datalist>
-          </div>
-          <Select
-            value={search.activo === undefined ? "todos" : search.activo ? "activos" : "inactivos"}
-            onValueChange={(v) =>
-              actualizarBusqueda({ activo: v === "todos" ? undefined : v === "activos" })
-            }
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Estado del registro" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="activos">Activos</SelectItem>
-              <SelectItem value="inactivos">Inactivos</SelectItem>
-              <SelectItem value="todos">Todos</SelectItem>
-            </SelectContent>
-          </Select>
+          </CampoFiltro>
+
+          <CampoFiltro etiqueta="Registro" htmlFor="f-registro">
+            <Select
+              value={search.registro}
+              onValueChange={(v) => actualizarBusqueda({ registro: v as RegistroFiltro })}
+            >
+              <SelectTrigger id="f-registro">
+                <SelectValue placeholder="Registro" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="activos">Activos</SelectItem>
+                <SelectItem value="inactivos">Inactivos</SelectItem>
+                <SelectItem value="todos">Todos</SelectItem>
+              </SelectContent>
+            </Select>
+          </CampoFiltro>
+
+          <CampoFiltro etiqueta="Desde" htmlFor="f-desde">
+            <Input
+              id="f-desde"
+              type="date"
+              value={search.desde ?? ""}
+              onChange={(e) => actualizarBusqueda({ desde: e.target.value || undefined })}
+            />
+          </CampoFiltro>
+          <CampoFiltro etiqueta="Hasta" htmlFor="f-hasta">
+            <Input
+              id="f-hasta"
+              type="date"
+              value={search.hasta ?? ""}
+              onChange={(e) => actualizarBusqueda({ hasta: e.target.value || undefined })}
+            />
+          </CampoFiltro>
         </div>
 
-        <div className="flex flex-wrap items-center gap-2">
-          <label className="text-xs text-muted-foreground">Desde</label>
-          <Input
-            type="date"
-            className="w-auto"
-            value={search.desde ?? ""}
-            onChange={(e) => actualizarBusqueda({ desde: e.target.value || undefined })}
-          />
-          <label className="text-xs text-muted-foreground">Hasta</label>
-          <Input
-            type="date"
-            className="w-auto"
-            value={search.hasta ?? ""}
-            onChange={(e) => actualizarBusqueda({ hasta: e.target.value || undefined })}
-          />
-          {hayFiltros ? (
+        {hayFiltros ? (
+          <div className="flex justify-end">
             <Button variant="ghost" size="sm" onClick={limpiarFiltros}>
               <X className="size-4" /> Limpiar filtros
             </Button>
-          ) : null}
-        </div>
+          </div>
+        ) : null}
       </div>
 
       <div className="card-surface overflow-x-auto p-0">
