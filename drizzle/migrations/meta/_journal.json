@@ -29,6 +29,13 @@
       "when": 1794865039481,
       "tag": "0003_seguimiento_y_documentos",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794913834356,
+      "tag": "0004_restringir_lectura_permisos",
+      "breakpoints": true
     }
   ]
 }
