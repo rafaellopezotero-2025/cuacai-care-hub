@@ -16,8 +16,9 @@ const filtrosDashboardSchema = z.object({
 
 export type FiltrosDashboard = z.infer<typeof filtrosDashboardSchema>;
 
+// Los registros sin centro/cobertura/vía llegan con id null: se agrupan como "sin dato".
 const itemSchema = z.object({
-  id: z.string(),
+  id: z.string().nullable().transform((v) => v ?? "__sin_dato__"),
   nombre: z.string(),
   valor: z.number(),
 });
@@ -76,6 +77,7 @@ export const obtenerDashboard = createServerFn({ method: "GET" })
 
     const parsed = dashboardResumenSchema.safeParse(resultado);
     if (!parsed.success) {
+      console.error("dashboard_resumen: respuesta inválida", parsed.error.issues);
       return {
         kpis: { total_pacientes: 0, total_trasplantes: 0, por_estado: {} },
         por_estado: [],
