@@ -16,6 +16,46 @@ const filtrosDashboardSchema = z.object({
 
 export type FiltrosDashboard = z.infer<typeof filtrosDashboardSchema>;
 
+/** Año en curso: el panel abre mostrando solo este año. */
+export const ANIO_ACTUAL = new Date().getFullYear();
+
+/** Año más antiguo ofrecido en el selector; "Todos los años" arranca desde acá. */
+export const ANIO_MIN_DISPONIBLE = 2015;
+
+export const ANIOS_DASHBOARD = Array.from(
+  { length: ANIO_ACTUAL - ANIO_MIN_DISPONIBLE + 1 },
+  (_, i) => ANIO_ACTUAL - i,
+);
+
+export function rangoDeAnio(anio: number): Pick<FiltrosDashboard, "desde" | "hasta"> {
+  return { desde: `${anio}-01-01`, hasta: `${anio}-12-31` };
+}
+
+/** Rango que muestra toda la historia registrada. */
+export const RANGO_TODOS_LOS_ANIOS: Pick<FiltrosDashboard, "desde" | "hasta"> = {
+  desde: `${ANIO_MIN_DISPONIBLE}-01-01`,
+  hasta: `${ANIO_ACTUAL}-12-31`,
+};
+
+/** Rango que se aplica cuando la URL no trae ninguno: el año en curso. */
+export const RANGO_PREDETERMINADO = rangoDeAnio(ANIO_ACTUAL);
+
+export function esMismoRango(
+  filtros: FiltrosDashboard,
+  rango: Pick<FiltrosDashboard, "desde" | "hasta">,
+): boolean {
+  return filtros.desde === rango.desde && filtros.hasta === rango.hasta;
+}
+
+/** Año seleccionado cuando el rango es exactamente un año calendario; null si es otro rango. */
+export function anioSeleccionado(filtros: FiltrosDashboard): number | null {
+  const { desde, hasta } = filtros;
+  if (!desde || !hasta) return null;
+  const anio = Number(desde.slice(0, 4));
+  if (!Number.isInteger(anio)) return null;
+  return desde === `${anio}-01-01` && hasta === `${anio}-12-31` ? anio : null;
+}
+
 // Los registros sin centro/cobertura/vía llegan con id null: se agrupan como "sin dato".
 const itemSchema = z.object({
   id: z.string().nullable().transform((v) => v ?? "__sin_dato__"),

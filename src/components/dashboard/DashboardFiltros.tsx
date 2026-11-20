@@ -5,6 +5,14 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Maestros } from "@/types/dominio";
 import type { FiltrosDashboard } from "@/lib/dashboard.functions";
+import {
+  ANIOS_DASHBOARD,
+  RANGO_PREDETERMINADO,
+  RANGO_TODOS_LOS_ANIOS,
+  anioSeleccionado,
+  esMismoRango,
+  rangoDeAnio,
+} from "@/lib/dashboard.functions";
 
 interface DashboardFiltrosProps {
   filtros: FiltrosDashboard;
@@ -13,35 +21,62 @@ interface DashboardFiltrosProps {
   onLimpiar: () => void;
 }
 
-const ANIO_ACTUAL = new Date().getFullYear();
-const ANIOS = Array.from({ length: ANIO_ACTUAL - 2015 + 1 }, (_, i) => ANIO_ACTUAL - i);
+const TODOS_LOS_ANIOS = "__todos__";
+const RANGO_PERSONALIZADO = "__personalizado__";
 
 function valorSelect(v?: string) {
   return v ?? "__todos__";
 }
 
-/** Barra de filtros del dashboard con chips de filtros activos. */
+interface Chip {
+  clave: string;
+  etiqueta: string;
+  quitar: () => void;
+}
+
+/** Barra de filtros del dashboard. Sin rango en la URL se muestra el año en curso. */
 export function DashboardFiltros({ filtros, maestros, onChange, onLimpiar }: DashboardFiltrosProps) {
-  const chips: { clave: keyof FiltrosDashboard; etiqueta: string }[] = [];
-  if (filtros.desde) chips.push({ clave: "desde", etiqueta: `Desde: ${filtros.desde}` });
-  if (filtros.hasta) chips.push({ clave: "hasta", etiqueta: `Hasta: ${filtros.hasta}` });
+  const rangoEsPrederminado = esMismoRango(filtros, RANGO_PREDETERMINADO);
+  const rangoEsTodos = esMismoRango(filtros, RANGO_TODOS_LOS_ANIOS);
+  const anio = anioSeleccionado(filtros);
+  const valorAnio = rangoEsTodos ? TODOS_LOS_ANIOS : anio !== null ? String(anio) : RANGO_PERSONALIZADO;
+
+  const chips: Chip[] = [];
+  if (!rangoEsPrederminado) {
+    if (rangoEsTodos) {
+      chips.push({
+        clave: "rango",
+        etiqueta: "Período: todos los años",
+        quitar: () => onChange(RANGO_PREDETERMINADO),
+      });
+    } else {
+      if (filtros.desde) {
+        chips.push({ clave: "desde", etiqueta: `Desde: ${filtros.desde}`, quitar: () => onChange({ desde: undefined }) });
+      }
+      if (filtros.hasta) {
+        chips.push({ clave: "hasta", etiqueta: `Hasta: ${filtros.hasta}`, quitar: () => onChange({ hasta: undefined }) });
+      }
+    }
+  }
   if (filtros.estado) {
     const e = maestros?.estadosTx.find((x) => x.id === filtros.estado);
-    chips.push({ clave: "estado", etiqueta: `Estado: ${e?.nombre ?? filtros.estado}` });
+    chips.push({ clave: "estado", etiqueta: `Estado: ${e?.nombre ?? filtros.estado}`, quitar: () => onChange({ estado: undefined }) });
   }
   if (filtros.tipo) {
     const t = maestros?.tiposTx.find((x) => x.id === filtros.tipo);
-    chips.push({ clave: "tipo", etiqueta: `Tipo: ${t?.nombre ?? filtros.tipo}` });
+    chips.push({ clave: "tipo", etiqueta: `Tipo: ${t?.nombre ?? filtros.tipo}`, quitar: () => onChange({ tipo: undefined }) });
   }
   if (filtros.cobertura) {
     const c = maestros?.coberturas.find((x) => x.id === filtros.cobertura);
-    chips.push({ clave: "cobertura", etiqueta: `Cobertura: ${c?.nombre ?? filtros.cobertura}` });
+    chips.push({ clave: "cobertura", etiqueta: `Cobertura: ${c?.nombre ?? filtros.cobertura}`, quitar: () => onChange({ cobertura: undefined }) });
   }
   if (filtros.centro) {
     const c = maestros?.centrosTx.find((x) => x.id === filtros.centro);
-    chips.push({ clave: "centro", etiqueta: `Centro: ${c?.nombre ?? filtros.centro}` });
+    chips.push({ clave: "centro", etiqueta: `Centro: ${c?.nombre ?? filtros.centro}`, quitar: () => onChange({ centro: undefined }) });
   }
-  if (filtros.localidad) chips.push({ clave: "localidad", etiqueta: `Localidad: ${filtros.localidad}` });
+  if (filtros.localidad) {
+    chips.push({ clave: "localidad", etiqueta: `Localidad: ${filtros.localidad}`, quitar: () => onChange({ localidad: undefined }) });
+  }
 
   const hayFiltros = chips.length > 0;
 
@@ -69,14 +104,21 @@ export function DashboardFiltros({ filtros, maestros, onChange, onLimpiar }: Das
         <div className="flex flex-col gap-1">
           <Label className="text-xs">Año</Label>
           <Select
-            value="__ninguno__"
-            onValueChange={(v) => onChange({ desde: `${v}-01-01`, hasta: `${v}-12-31` })}
+            value={valorAnio}
+            onValueChange={(v) => {
+              if (v === TODOS_LOS_ANIOS) onChange(RANGO_TODOS_LOS_ANIOS);
+              else if (v !== RANGO_PERSONALIZADO) onChange(rangoDeAnio(Number(v)));
+            }}
           >
             <SelectTrigger><SelectValue placeholder="Seleccionar" /></SelectTrigger>
             <SelectContent>
-              {ANIOS.map((a) => (
+              <SelectItem value={TODOS_LOS_ANIOS}>Todos los años</SelectItem>
+              {ANIOS_DASHBOARD.map((a) => (
                 <SelectItem key={a} value={String(a)}>{a}</SelectItem>
               ))}
+              {valorAnio === RANGO_PERSONALIZADO ? (
+                <SelectItem value={RANGO_PERSONALIZADO} disabled>Rango personalizado</SelectItem>
+              ) : null}
             </SelectContent>
           </Select>
         </div>
@@ -147,7 +189,7 @@ export function DashboardFiltros({ filtros, maestros, onChange, onLimpiar }: Das
           <button
             key={chip.clave}
             type="button"
-            onClick={() => onChange({ [chip.clave]: undefined })}
+            onClick={chip.quitar}
             className="inline-flex items-center gap-1 rounded-full border border-border bg-secondary px-2.5 py-1 text-xs text-secondary-foreground hover:bg-secondary/80"
           >
             {chip.etiqueta}

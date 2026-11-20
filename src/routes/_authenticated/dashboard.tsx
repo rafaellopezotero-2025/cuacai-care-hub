@@ -8,7 +8,11 @@ import { PERMISOS } from "@/auth";
 import { PANTALLA_VACIA_CLASS } from "@/lib/utils";
 import { Skeleton } from "@/components/ui/skeleton";
 import { maestrosQueryOptions } from "@/lib/maestros.functions";
-import { dashboardQueryOptions, type FiltrosDashboard } from "@/lib/dashboard.functions";
+import {
+  RANGO_PREDETERMINADO,
+  dashboardQueryOptions,
+  type FiltrosDashboard,
+} from "@/lib/dashboard.functions";
 import { CODIGOS_ESTADO } from "@/types/dominio";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { DashboardFiltros } from "@/components/dashboard/DashboardFiltros";
@@ -28,7 +32,12 @@ const filtrosSearchSchema = z.object({
 });
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  validateSearch: (search) => filtrosSearchSchema.parse(search),
+  // Sin rango en la URL, el panel abre con el año en curso.
+  validateSearch: (search) => {
+    const parsed = filtrosSearchSchema.parse(search);
+    if (!parsed.desde && !parsed.hasta) return { ...parsed, ...RANGO_PREDETERMINADO };
+    return parsed;
+  },
   head: () => ({
     meta: [
       { title: "Dashboard · CUCAIER Gestión de Pacientes" },
@@ -177,7 +186,7 @@ function DashboardPage() {
       titulo: "Total de pacientes",
       valor: datos?.kpis.total_pacientes ?? 0,
       icono: <Users className="size-4" />,
-      onClick: () => navigate({ to: "/pacientes", search: {} as never }),
+      onClick: () => navigate({ to: "/pacientes", search: verPacientesSearch() as never }),
     },
     {
       titulo: "Lista de espera",
@@ -213,7 +222,8 @@ function DashboardPage() {
       titulo: "Trasplantes registrados",
       valor: datos?.kpis.total_trasplantes ?? 0,
       icono: <Stethoscope className="size-4" />,
-      onClick: () => navigate({ to: "/trasplantes", search: {} as never }),
+      onClick: () =>
+        navigate({ to: "/trasplantes", search: { desde: filtros.desde, hasta: filtros.hasta } as never }),
     },
   ];
 
