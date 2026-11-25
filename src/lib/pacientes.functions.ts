@@ -89,6 +89,7 @@ export type TrasplanteConJoins = Trasplante & {
   coberturas: { descripcion: string } | null;
   centros_tx: { nombre: string } | null;
   medicos_ref: { nombres: string; apellidos: string } | null;
+  medico_derivante: { nombres: string; apellidos: string } | null;
 };
 
 export interface CentroDerivacionFicha {
