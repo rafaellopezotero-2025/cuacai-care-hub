@@ -1,0 +1,1 @@
+ALTER TABLE public.trasplantes ADD COLUMN medico_derivante_id uuid REFERENCES public.medicos_ref(id);

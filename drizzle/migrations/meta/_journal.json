@@ -43,6 +43,13 @@
       "when": 1794914955247,
       "tag": "0005_buscar_pacientes_solo_inactivos",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1795615455295,
+      "tag": "0006_trasplantes_medico_derivante",
+      "breakpoints": true
     }
   ]
 }

@@ -79,7 +79,7 @@ export const buscarPacientes = createServerFn({ method: "GET" })
   });
 
 const SELECT_TRASPLANTE_JOIN =
-  "*, diagnosticos(diagnostico), tipos_tx(tipo_tx), estados_tx(estado_tx, codigo), vias_admin(descripcion), coberturas(descripcion), centros_tx(nombre), medicos_ref(nombres, apellidos)";
+  "*, diagnosticos(diagnostico), tipos_tx(tipo_tx), estados_tx(estado_tx, codigo), vias_admin(descripcion), coberturas(descripcion), centros_tx(nombre), medicos_ref!trasplantes_medico_ref_id_fkey(nombres, apellidos), medico_derivante:medicos_ref!trasplantes_medico_derivante_id_fkey(nombres, apellidos)";
 
 export type TrasplanteConJoins = Trasplante & {
   diagnosticos: { diagnostico: string } | null;

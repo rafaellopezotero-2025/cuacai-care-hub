@@ -28,6 +28,7 @@ const trasplanteFormSchema = z.object({
   cobertura_id: z.string(),
   centro_tx_id: z.string(),
   medico_ref_id: z.string(),
+  medico_derivante_id: z.string(),
   centro_derivacion_id: z.string().optional(),
   fecha_tx: z.string().trim().refine((v) => v === "" || new Date(v) <= new Date(), "La fecha no puede ser futura."),
   observaciones: z.string().trim(),
@@ -44,6 +45,7 @@ export const TRASPLANTE_FORM_DEFAULTS: TrasplanteFormValues = {
   cobertura_id: SIN_VALOR,
   centro_tx_id: SIN_VALOR,
   medico_ref_id: SIN_VALOR,
+  medico_derivante_id: SIN_VALOR,
   centro_derivacion_id: SIN_VALOR,
   fecha_tx: "",
   observaciones: "",
@@ -198,6 +200,7 @@ export function TrasplanteForm({ valoresIniciales, pacientePreseleccionado, paci
           <SelectMaestro control={form.control} name="cobertura_id" label="Cobertura" opciones={maestros?.coberturas ?? []} />
           <SelectMaestro control={form.control} name="centro_tx_id" label="Centro" opciones={maestros?.centrosTx ?? []} />
           <SelectMaestro control={form.control} name="medico_ref_id" label="Médico referente" opciones={maestros?.medicosRef ?? []} />
+          <SelectMaestro control={form.control} name="medico_derivante_id" label="Médico derivante" opciones={maestros?.medicosRef ?? []} />
           {mostrarCentroDerivacion ? (
             <SelectMaestro control={form.control} name="centro_derivacion_id" label="Centro de derivación del paciente" opciones={maestros?.centrosDerivacion ?? []} />
           ) : null}

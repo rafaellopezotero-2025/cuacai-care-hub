@@ -86,6 +86,8 @@ function FichaPacientePage() {
   const edad = calcularEdad(paciente.fecha_nacimiento);
   const procesoActual = trasplantes[0];
   const medico = procesoActual?.medicos_ref ? `${procesoActual.medicos_ref.apellidos}, ${procesoActual.medicos_ref.nombres}` : "—";
+  const derivante = trasplantes.find((t) => t.medico_derivante)?.medico_derivante;
+  const medicoDerivante = derivante ? `${derivante.apellidos}, ${derivante.nombres}` : "—";
   const contactoCentro = centroDerivacion
     ? [centroDerivacion.telefono, centroDerivacion.email].filter(Boolean).join(" · ") || "—"
     : "—";
@@ -171,6 +173,7 @@ function FichaPacientePage() {
           <h2 className="mb-3 text-sm font-semibold text-foreground">Referencia y derivación</h2>
           <dl className="space-y-2 text-sm">
             <CampoLinea etiqueta="Médico de referencia" valor={medico} />
+            <CampoLinea etiqueta="Médico derivante" valor={medicoDerivante} />
             <CampoLinea etiqueta="Centro de derivación" valor={centroDerivacion?.nombre ?? "—"} />
             <CampoLinea
               etiqueta="Dirección del centro"
@@ -219,7 +222,7 @@ function FichaPacientePage() {
       </div>
       <div className="card-surface mt-4 p-5">
         <h2 className="mb-3 text-sm font-semibold text-foreground">Documentación</h2>
-        <DocumentosPaciente pacienteId={pacienteId} editable={false} />
+        <DocumentosPaciente pacienteId={pacienteId} editable={hasPermission(PERMISOS.pacientesEditar)} />
       </div>
     </RequierePermiso>
   );

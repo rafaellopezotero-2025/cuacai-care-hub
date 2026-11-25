@@ -538,6 +538,7 @@ export type Database = {
           estado_tx_id: string
           fecha_tx: string | null
           id: string
+          medico_derivante_id: string | null
           medico_ref_id: string | null
           observaciones: string | null
           paciente_id: string
@@ -556,6 +557,7 @@ export type Database = {
           estado_tx_id: string
           fecha_tx?: string | null
           id?: string
+          medico_derivante_id?: string | null
           medico_ref_id?: string | null
           observaciones?: string | null
           paciente_id: string
@@ -574,6 +576,7 @@ export type Database = {
           estado_tx_id?: string
           fecha_tx?: string | null
           id?: string
+          medico_derivante_id?: string | null
           medico_ref_id?: string | null
           observaciones?: string | null
           paciente_id?: string
@@ -609,6 +612,13 @@ export type Database = {
             columns: ["estado_tx_id"]
             isOneToOne: false
             referencedRelation: "estados_tx"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "trasplantes_medico_derivante_id_fkey"
+            columns: ["medico_derivante_id"]
+            isOneToOne: false
+            referencedRelation: "medicos_ref"
             referencedColumns: ["id"]
           },
           {

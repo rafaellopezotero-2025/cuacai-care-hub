@@ -46,6 +46,7 @@ function EditarTrasplantePage() {
           via_admin_id: valores.via_admin_id === SIN_VALOR || valores.via_admin_id === "" ? null : valores.via_admin_id,
           cobertura_id: valores.cobertura_id === SIN_VALOR || valores.cobertura_id === "" ? null : valores.cobertura_id,
           centro_tx_id: valores.centro_tx_id === SIN_VALOR || valores.centro_tx_id === "" ? null : valores.centro_tx_id,
+          medico_derivante_id: valores.medico_derivante_id === SIN_VALOR || valores.medico_derivante_id === "" ? null : valores.medico_derivante_id,
           medico_ref_id: valores.medico_ref_id === SIN_VALOR || valores.medico_ref_id === "" ? null : valores.medico_ref_id,
           fecha_tx: valores.fecha_tx || null,
           observaciones: valores.observaciones || null,
@@ -83,6 +84,7 @@ function EditarTrasplantePage() {
               cobertura_id: tx.cobertura_id ?? SIN_VALOR,
               centro_tx_id: tx.centro_tx_id ?? SIN_VALOR,
               medico_ref_id: tx.medico_ref_id ?? SIN_VALOR,
+              medico_derivante_id: tx.medico_derivante_id ?? SIN_VALOR,
               fecha_tx: tx.fecha_tx ?? "",
               observaciones: tx.observaciones ?? "",
             }}

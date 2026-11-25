@@ -52,6 +52,7 @@ function NuevoTrasplantePage() {
           cobertura_id: valores.cobertura_id === "__ninguno__" || valores.cobertura_id === "" ? null : valores.cobertura_id,
           centro_tx_id: valores.centro_tx_id === "__ninguno__" || valores.centro_tx_id === "" ? null : valores.centro_tx_id,
           medico_ref_id: valores.medico_ref_id === "__ninguno__" || valores.medico_ref_id === "" ? null : valores.medico_ref_id,
+          medico_derivante_id: valores.medico_derivante_id === "__ninguno__" || valores.medico_derivante_id === "" ? null : valores.medico_derivante_id,
           centro_derivacion_id: !valores.centro_derivacion_id || valores.centro_derivacion_id === "__ninguno__" ? null : valores.centro_derivacion_id,
           fecha_tx: valores.fecha_tx || null,
           observaciones: valores.observaciones || null,

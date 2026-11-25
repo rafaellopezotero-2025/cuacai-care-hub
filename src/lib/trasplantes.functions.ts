@@ -24,7 +24,7 @@ const filtrosTrasplantesSchema = z.object({
 export type FiltrosTrasplantes = z.infer<typeof filtrosTrasplantesSchema>;
 
 const SELECT_JOIN =
-  "*, diagnosticos(diagnostico), tipos_tx(tipo_tx), estados_tx(estado_tx, codigo), vias_admin(descripcion), coberturas(descripcion), centros_tx(nombre), medicos_ref(nombres, apellidos), pacientes!inner(id, nombres, apellidos, dni, localidad)";
+  "*, diagnosticos(diagnostico), tipos_tx(tipo_tx), estados_tx(estado_tx, codigo), vias_admin(descripcion), coberturas(descripcion), centros_tx(nombre), medicos_ref!trasplantes_medico_ref_id_fkey(nombres, apellidos), medico_derivante:medicos_ref!trasplantes_medico_derivante_id_fkey(nombres, apellidos), pacientes!inner(id, nombres, apellidos, dni, localidad)";
 
 export type TrasplanteListado = TrasplanteConJoins & {
   pacientes: { id: string; nombres: string; apellidos: string; dni: string | null; localidad: string | null };
@@ -82,6 +82,7 @@ const trasplanteBaseSchema = z.object({
   cobertura_id: uuid.optional().nullable(),
   centro_tx_id: uuid.optional().nullable(),
   medico_ref_id: uuid.optional().nullable(),
+  medico_derivante_id: uuid.optional().nullable(),
   fecha_tx: z
     .string()
     .trim()
@@ -104,6 +105,7 @@ function aFilaTrasplante(d: z.infer<typeof trasplanteBaseSchema>) {
     cobertura_id: d.cobertura_id ?? null,
     centro_tx_id: d.centro_tx_id ?? null,
     medico_ref_id: d.medico_ref_id ?? null,
+    medico_derivante_id: d.medico_derivante_id ?? null,
     fecha_tx: d.fecha_tx ?? null,
     observaciones: d.observaciones ?? null,
   };
